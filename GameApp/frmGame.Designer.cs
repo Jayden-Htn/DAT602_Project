@@ -36,7 +36,7 @@
             lblScore = new Label();
             txtChat = new TextBox();
             btnChat = new Button();
-            btnText = new Button();
+            btnTest = new Button();
             lblTest = new Label();
             btnEatFruit = new Button();
             btnEatMeat = new Button();
@@ -54,6 +54,7 @@
             btnExit.TabIndex = 0;
             btnExit.Text = "Exit Game";
             btnExit.UseVisualStyleBackColor = true;
+            btnExit.Click += btnExit_Click;
             // 
             // lstChat
             // 
@@ -116,14 +117,15 @@
             btnChat.Text = "Send";
             btnChat.UseVisualStyleBackColor = true;
             // 
-            // btnText
+            // btnTest
             // 
-            btnText.Location = new Point(175, 64);
-            btnText.Name = "btnText";
-            btnText.Size = new Size(183, 31);
-            btnText.TabIndex = 8;
-            btnText.Text = "Get map data";
-            btnText.UseVisualStyleBackColor = true;
+            btnTest.Location = new Point(175, 64);
+            btnTest.Name = "btnTest";
+            btnTest.Size = new Size(183, 31);
+            btnTest.TabIndex = 8;
+            btnTest.Text = "Get map data";
+            btnTest.UseVisualStyleBackColor = true;
+            btnTest.Click += btnTest_Click;
             // 
             // lblTest
             // 
@@ -200,7 +202,7 @@
             Controls.Add(btnEatMeat);
             Controls.Add(btnEatFruit);
             Controls.Add(lblTest);
-            Controls.Add(btnText);
+            Controls.Add(btnTest);
             Controls.Add(btnChat);
             Controls.Add(txtChat);
             Controls.Add(lblScore);
@@ -225,7 +227,7 @@
         private Label lblScore;
         private TextBox txtChat;
         private Button btnChat;
-        private Button btnText;
+        private Button btnTest;
         private Label lblTest;
         private Button btnEatFruit;
         private Button btnEatMeat;

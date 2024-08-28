@@ -16,5 +16,20 @@ namespace GameApp
         {
             InitializeComponent();
         }
+
+        private void btnGame_Click(object sender, EventArgs e)
+        {
+            GameManager.LoadNewPage("game");
+        }
+
+        private void btnAdmin_Click(object sender, EventArgs e)
+        {
+            GameManager.LoadNewPage("admin");
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            GameManager.LoadNewPage("login");
+        }
     }
 }

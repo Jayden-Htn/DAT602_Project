@@ -13,9 +13,15 @@ namespace GameApp
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            String userName = txtUsername.Text;
+            String username = txtUsername.Text;
             String password = txtPassword.Text;
-            DialogResult = MessageBox.Show("Button clicked.");
+            bool data = DaoUser.LoginPlayer(username, password);
+            DialogResult = MessageBox.Show($"User exists: {data}");
+
+            txtUsername.Text = "";
+            txtPassword.Text = "";
+
+            GameManager.LoadNewPage("lobby");
         }
     }
 }

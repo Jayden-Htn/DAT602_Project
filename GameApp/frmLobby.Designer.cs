@@ -31,6 +31,7 @@
             lblHeading = new Label();
             btnAdmin = new Button();
             btnGame = new Button();
+            btnLogout = new Button();
             SuspendLayout();
             // 
             // lblHeading
@@ -51,6 +52,7 @@
             btnAdmin.TabIndex = 1;
             btnAdmin.Text = "Admin";
             btnAdmin.UseVisualStyleBackColor = true;
+            btnAdmin.Click += btnAdmin_Click;
             // 
             // btnGame
             // 
@@ -60,12 +62,24 @@
             btnGame.TabIndex = 2;
             btnGame.Text = "Start Game";
             btnGame.UseVisualStyleBackColor = true;
+            btnGame.Click += btnGame_Click;
+            // 
+            // btnLogout
+            // 
+            btnLogout.Location = new Point(652, 91);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(102, 31);
+            btnLogout.TabIndex = 3;
+            btnLogout.Text = "Log out";
+            btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += btnLogout_Click;
             // 
             // frmLobby
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnLogout);
             Controls.Add(btnGame);
             Controls.Add(btnAdmin);
             Controls.Add(lblHeading);
@@ -80,5 +94,6 @@
         private Label lblHeading;
         private Button btnAdmin;
         private Button btnGame;
+        private Button btnLogout;
     }
 }

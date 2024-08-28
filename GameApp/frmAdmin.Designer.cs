@@ -33,11 +33,12 @@
             lstPlayers = new ListBox();
             label1 = new Label();
             btnClose = new Button();
+            btnListPlayers = new Button();
             SuspendLayout();
             // 
             // btnAddPlayer
             // 
-            btnAddPlayer.Location = new Point(374, 69);
+            btnAddPlayer.Location = new Point(663, 69);
             btnAddPlayer.Name = "btnAddPlayer";
             btnAddPlayer.Size = new Size(102, 31);
             btnAddPlayer.TabIndex = 0;
@@ -46,7 +47,7 @@
             // 
             // btnDeletePlayer
             // 
-            btnDeletePlayer.Location = new Point(374, 120);
+            btnDeletePlayer.Location = new Point(663, 126);
             btnDeletePlayer.Name = "btnDeletePlayer";
             btnDeletePlayer.Size = new Size(102, 31);
             btnDeletePlayer.TabIndex = 1;
@@ -80,12 +81,24 @@
             btnClose.TabIndex = 4;
             btnClose.Text = "Close";
             btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
+            // 
+            // btnListPlayers
+            // 
+            btnListPlayers.Location = new Point(321, 69);
+            btnListPlayers.Name = "btnListPlayers";
+            btnListPlayers.Size = new Size(102, 31);
+            btnListPlayers.TabIndex = 5;
+            btnListPlayers.Text = "List Players";
+            btnListPlayers.UseVisualStyleBackColor = true;
+            btnListPlayers.Click += btnListPlayers_Click;
             // 
             // frmAdmin
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnListPlayers);
             Controls.Add(btnClose);
             Controls.Add(label1);
             Controls.Add(lstPlayers);
@@ -104,5 +117,6 @@
         private ListBox lstPlayers;
         private Label label1;
         private Button btnClose;
+        private Button btnListPlayers;
     }
 }

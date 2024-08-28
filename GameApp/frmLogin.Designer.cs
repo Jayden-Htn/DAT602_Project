@@ -41,7 +41,7 @@
             // lblUsername
             // 
             lblUsername.AutoSize = true;
-            lblUsername.Location = new Point(123, 170);
+            lblUsername.Location = new Point(123, 174);
             lblUsername.Name = "lblUsername";
             lblUsername.Size = new Size(81, 21);
             lblUsername.TabIndex = 0;
@@ -57,7 +57,7 @@
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Location = new Point(131, 225);
+            lblPassword.Location = new Point(131, 227);
             lblPassword.Name = "lblPassword";
             lblPassword.Size = new Size(76, 21);
             lblPassword.TabIndex = 2;

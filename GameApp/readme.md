@@ -15,6 +15,6 @@ it will return false. The lobby page will be loaded on EITHER result. Example us
 
 Screen 2: lobby. Used to connect to admin and game screens for tests.
 
-Screen 3: game. Clicking load map will show the special tiles in the map (empty tiles are not stored).
+Screen 3: game. Clicking load map will show the special tiles in the map (empty tiles are not stored). Should show two tiles.
 
 Screen 4: admin. Clicking display users displays all users in the database (Player1-4).

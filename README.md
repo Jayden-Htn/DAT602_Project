@@ -1,6 +1,9 @@
 # DAT602_Project
 DAT602 project repo.
 
+## Instructions
+
+Installation and testing instructions in Project readme.
 
 ## Concept
 

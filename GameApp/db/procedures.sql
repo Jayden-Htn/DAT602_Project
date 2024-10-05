@@ -5,7 +5,7 @@ use GameDB;
 -- <========== 1. Login Procedure ==========>
 delimiter //
 drop procedure if exists Login//
-create procedure Login (
+create definer = 'game'@'localhost' procedure Login (
 	in pUsername varchar(255),
     in pPassword varchar(255)
 )
@@ -60,7 +60,7 @@ delimiter ;
 -- <========== 2. Register Procedure ==========>
 delimiter //
 drop procedure if exists Register//
-create procedure Register (
+create definer = 'game'@'localhost' procedure Register (
 	in pUsername varchar(255),
     in pPassword varchar(255)
 )
@@ -82,7 +82,7 @@ delimiter ;
 -- <========== 3. Layout Procedure ==========>
 delimiter //
 drop procedure if exists Layout//
-create procedure Layout (
+create definer = 'game'@'localhost' procedure Layout (
 	in pPlayerID varchar(255),
 	in pGameID varchar(255)
 )
@@ -101,7 +101,8 @@ begin
     -- Note: only special tiles are stored, empty tiles are not
     select * 
     from tblTile
-    where MapID = (select ID from tblMap where GameID = pGameID) and ColPosition >= xPos-4 and ColPosition <= xPos+4 and RowPosition >= yPos-4 and RowPosition <= yPos+4;
+    where MapID = (select ID from tblMap where GameID = pGameID) and ColPosition >= xPos-4 
+		and ColPosition <= xPos+4 and RowPosition >= yPos-4 and RowPosition <= yPos+4;
 end//
 delimiter ;
 
@@ -109,7 +110,7 @@ delimiter ;
 -- <========== 4. Generate Tiles Procedure (placing items) ==========>
 delimiter //
 drop procedure if exists GenerateMap//
-create procedure GenerateMap (
+create definer = 'game'@'localhost' procedure GenerateMap (
 	in pMapID varchar(255)
 )
 comment 'Generating unique tiles (items) in the map'
@@ -149,7 +150,7 @@ delimiter ;
 -- <========== 5. Player Movement Procedure ==========>
 delimiter //
 drop procedure if exists MovePlayer//
-create procedure MovePlayer (
+create definer = 'game'@'localhost' procedure MovePlayer (
 	in pCharacterID int,
     in pGameID int,
     in pNewCol int,
@@ -170,15 +171,19 @@ begin
     select MaxColumns, MaxRows into mapMaxCol, mapMaxRow from tblMap where GameID = pGameID;
         
     -- Check that tile is adjacent
-    if (pNewCol >= (currentCol-1) and pNewCol <= (currentCol+1) and pNewRow >= (currentRow-1) and pNewRow <= (currentRow+1)) then 
+    if (pNewCol >= (currentCol-1) and pNewCol <= (currentCol+1) 
+		and pNewRow >= (currentRow-1) and pNewRow <= (currentRow+1)) then 
 		-- Check that tile is within game bounds
-        if (pNewCol >= 1 and pNewCol <= mapMaxCol) and (pNewRow >= 1 and pNewRow <= mapMaxRow) then
+        if (pNewCol >= 1 and pNewCol <= mapMaxCol) and (pNewRow >= 1 
+			and pNewRow <= mapMaxRow) then
 			-- Check if any character (including self) is not on tile
-			if (not exists (select * from tblCharacter where GameID = pGameID and ColPosition = pNewCol and RowPosition = pNewRow)) then
+			if (not exists (select * from tblCharacter where GameID = pGameID 
+				and ColPosition = pNewCol and RowPosition = pNewRow)) then
 				-- Check if the tile is unique (stored)
 				if (exists (select * from tblTile where colPosition = pNewCol and rowPosition = pNewRow)) then
 					-- Check tile type is valid for move (not obstacle)
-					if (select IsObstacle from tblTileType where `Name` = (select TileTypeName from tblTile where colPosition = pNewCol and rowPosition = pNewRow)) = 0 then
+					if (select IsObstacle from tblTileType where `Name` = 
+						(select TileTypeName from tblTile where colPosition = pNewCol and rowPosition = pNewRow)) = 0 then
 						-- Not obstacle so valid 
                         update tblCharacter set ColPosition = pNewCol, RowPosition = pNewRow where ID = pCharacterID;
 						select "Successful move" as 'Message';
@@ -206,7 +211,7 @@ delimiter ;
 -- <========== 6. Scoring Procedure ==========>
 delimiter //
 drop procedure if exists UpdateScore//
-create procedure UpdateScore (
+create definer = 'game'@'localhost' procedure UpdateScore (
 	in pCharacterID int,
     in pScoreChange int
 )
@@ -226,7 +231,7 @@ delimiter ;
 -- <========== 7. Interact (Pickup) Procedure ==========>
 delimiter //
 drop procedure if exists TileInteract//
-create procedure TileInteract (
+create definer = 'game'@'localhost' procedure TileInteract (
 	in pCharacterID int,
     in pMapID int,
     in pColPos int,
@@ -236,7 +241,8 @@ comment 'Character picking up or interacting with entities'
 begin	
 	declare tileType varchar(255) default 0;
     -- Get tile
-    select TileTypeName into tileType from tblTile where MapID = pCharacterID and ColPosition = pColPos and RowPosition = pRowPos;
+    select TileTypeName into tileType from tblTile 
+		where MapID = pCharacterID and ColPosition = pColPos and RowPosition = pRowPos;
     -- Check if tile exists
 	if (tileType is not null and tileType != '0') then
 		if (select AddInventory from tblEntity where `Name` = tileType) then
@@ -250,7 +256,8 @@ begin
 				CurrentHealth = CurrentHealth + (select HealthEffect from tblEntity where `Name` = tileType)
 			where ID = pCharacterID;
             -- Check new health isn't over max
-            if (select CurrentHealth from tblCharacter where ID = pCharacterID) > (select MaxHealth from tblCharacter where ID = pCharacterID) then
+            if (select CurrentHealth from tblCharacter where ID = pCharacterID) 
+				> (select MaxHealth from tblCharacter where ID = pCharacterID) then
 				update tblCharacter
 				set CurrentHealth = (select MaxHealth from tblCharacter where ID = pCharacterID)
 				where ID = pCharacterID;
@@ -274,7 +281,7 @@ delimiter ;
 -- <========== 8. NPC Move Procedure ==========>
 delimiter //
 drop procedure if exists NpcMove//
-create procedure NpcMove (
+create definer = 'game'@'localhost' procedure NpcMove (
 	in pMapID int
 )
 comment 'Move npcs (animals) randomly'
@@ -312,7 +319,8 @@ begin
             select rowPos + FLOOR(-1 + (RAND() * 3)) into rowNew;
 			
             -- Check if tile empty (not stored)
-			if (not exists (select * from tblTile where MapID = pMapID and ColPosition = colNew and RowPosition = rowNew)) then
+			if (not exists (select * from tblTile 
+				where MapID = pMapID and ColPosition = colNew and RowPosition = rowNew)) then
 				-- Check if in map bounds
                 if colNew >= 1 and colNew <= (select MaxColumns from tblMap where ID = pMapID) and 
 					rowNew >= 1 and rowNew <= (select MaxRows from tblMap where ID = pMapID) then
@@ -333,7 +341,7 @@ delimiter ;
 -- <========== 9. Stop Game Procedure ==========>
 delimiter //
 drop procedure if exists StopGame//
-create procedure StopGame (
+create definer = 'game'@'localhost' procedure StopGame (
 	in pGameID int
 )
 comment 'Stop one or all games'
@@ -362,7 +370,7 @@ delimiter ;
 -- <========== 11. Update Player Procedure ==========>
 delimiter //
 drop procedure if exists UpdatePlayer//
-create procedure UpdatePlayer (
+create definer = 'game'@'localhost' procedure UpdatePlayer (
 	in pPlayerID int,
     in pUsername varchar(255),
     in pPassword varchar(255),
@@ -394,14 +402,18 @@ delimiter ;
 -- <========== 12. Delete Player Procedure ==========>
 delimiter //
 drop procedure if exists DeletePlayer//
-create procedure DeletePlayer (
+create definer = 'game'@'localhost' procedure DeletePlayer (
 	in pPlayerID int
 )
 comment "Delete a player"
 begin	
-	-- Note: deleting a player should cascade game requests, chat messages, characters, games, maps, inventory, tiles
+	-- Note: deleting a player should cascade game requests, 
+    -- chat messages, characters, games, maps, inventory, tiles
     if (exists (select * from tblPlayer where ID = pPlayerID)) then
-        delete from tblGame where GameID in (select GameID from tblCharacter where PlayerID = pPlayerID);
+        if (exists (select GameID from tblCharacter where PlayerID = pPlayerID)) then
+			delete from tblGame where GameID in 
+				(select GameID from tblCharacter where PlayerID = pPlayerID);
+		end if;
         delete from tblPlayer where ID = pPlayerID;
         select "Player deleted" as 'Message';
 	else

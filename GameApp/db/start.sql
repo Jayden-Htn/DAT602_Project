@@ -173,5 +173,19 @@ begin
 end//
 delimiter ;
 
+-- Create Database Users Procedure
+delimiter //
+drop procedure if exists CreateUsers//
+create procedure CreateUsers()
+begin
+	-- drop user 'game'@'localhost';
+	if (not exists (select user, host from mysql.user where user = 'game' and host = 'localhost')) then
+		create user 'game'@'localhost' identified by 'password123';
+		grant execute, select, insert, update, delete on GameDB.* to 'game'@'localhost';
+	end if;
+end//
+delimiter ;
+
 call MakeTables();
 call InsertData();
+call CreateUsers();

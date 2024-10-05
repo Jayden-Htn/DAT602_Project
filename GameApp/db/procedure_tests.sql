@@ -4,6 +4,7 @@ use GameDB;
 
 -- <========== Login Procedure ==========>
 -- Inputs: username, password
+select * from tblPlayer where `Online` = 1; -- Should return no players online
 call Login('Player1', 'Password123'); -- Should return Message: 'Success'
 call Login('Player1', 'Password'); -- Should return Message: 'Invalid credentials'
 call Login('Player46', 'Password123'); -- Should return Message: 'Invalid credentials'
@@ -19,7 +20,7 @@ call Register('Player5', 'Password123'); -- Should return Message: 'Duplicate'
 -- Inputs: PlayerID, GameID
 call Layout(1, 1); -- Should return two unique tiles within 4 tiles of character (0,0)
 
--- <========== Generate Tiles Procedure ==========>
+-- <========== Generate Map Procedure ==========>
 -- Inputs: GameID
 delete from tblTile where MapID = 2;
 call GenerateMap(2);
@@ -80,8 +81,8 @@ select * from tblPlayer where ID = 1; -- Data changed
 -- <========== Delete Player Procedure ==========>
 -- Inputs: PlayerID
 select * from tblPlayer; -- Player exists
-call DeletePlayer(1); -- Should return Message: 'Success'
+call DeletePlayer(3); -- Should return Message: 'Success'
 select * from tblPlayer; -- Player deleted
-call DeletePlayer(1); -- Should return Message: 'Player doesn't exist'
+call DeletePlayer(3); -- Should return Message: 'Player doesn't exist'
 select * from tblCharacter; -- Cascade deleted game, characters, etc.
 				 

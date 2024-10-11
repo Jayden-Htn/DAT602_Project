@@ -15,7 +15,7 @@ namespace GameApp
         {
             String username = txtUsername.Text;
             String password = txtPassword.Text;
-            bool data = DaoUser.LoginPlayer(username, password);
+            string data = DaoUser.Login(username, password);
             DialogResult = MessageBox.Show($"User exists: {data}");
 
             txtUsername.Text = "";

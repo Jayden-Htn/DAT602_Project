@@ -143,6 +143,9 @@ begin
 		end while;
         set colNo = colNo + 1;
 	end while;
+    
+    -- Return map
+    select * from tblTile where MapID = pMapID; 
 end//
 delimiter ;
 
@@ -292,6 +295,7 @@ begin
     declare rowPos int;
     declare colNew int;
     declare rowNew int;
+    declare npcMovedCount int default 0;
     
 	declare npcCursor cursor for
         select id, ColPosition, RowPosition 
@@ -328,12 +332,17 @@ begin
                     update tblTile
 					set ColPosition = colNew, RowPosition = rowNew
 					where ID = tileID;
+                    set npcMovedCount = npcMovedCount + 1;
 				end if;
 			end if;
-            -- Don't move if tile not free. Don't loop until valid tile to avoid potential inifnite loops with random generation
+            -- Don't move if tile not free. I decided not to loop until valid tile to avoid 
+            -- potential infinite loops with random generation
 		end if;
     end loop npcLoop;
     close npcCursor;
+    
+    -- Return number of NPCs moved
+    select npcMovedCount as 'Message';
 end//
 delimiter ;
 
@@ -349,12 +358,16 @@ begin
 	-- Note: deleting a game should cascade delete map, tiles, inventory, characters, chat messages
     if (pGameID is null) then
 		-- Stop all games, temporarily disable safe updates as no where clause
-        SET SQL_SAFE_UPDATES = 0;
+        set SQL_SAFE_UPDATES = 0;
         delete from tblGame;
-        SET SQL_SAFE_UPDATES = 1;
+        set SQL_SAFE_UPDATES = 1;
+        
+        select "Stopped all games" as 'Message';
 	else
 		-- Stop one game
         delete from tblGame where GameID = pGameID;
+        
+        select "Stopped game" as 'Message';
 	end if;
 end//
 delimiter ;
@@ -395,6 +408,8 @@ begin
     if (pHighestScore is not null) then
 		update tblPlayer set HighestScore = pHighestScore where ID = pPlayerID;
 	end if;
+    
+    select * from tblPlayer where ID = pPlayerID;
 end//
 delimiter ;
 

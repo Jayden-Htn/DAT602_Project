@@ -1,20 +1,15 @@
-# Instructions
+# Readme
+
+## Instructions
 
 To run this project:
 1. Load Solution into Visual Studio
 2. Run /db/start.sql to initialise the database
-3. Run /db/test_procedures.sql to create the test procedures_
+3. Run /db/procedures.sql to create the procedures
 4. Run the program
 
+## Run Modes
 
-## The Program
-
-Screen 1: login/register. Entering a valid user will return true, if the username and password doesn't match a user, 
-it will return false. The lobby page will be loaded on EITHER result. Example users: 'Player1', 'Player2', 'Player3', 
-'Player4', all with 'Password123'.
-
-Screen 2: lobby. Used to connect to admin and game screens for tests.
-
-Screen 3: game. Clicking load map will show the special tiles in the map (empty tiles are not stored). Should show two tiles.
-
-Screen 4: admin. Clicking display users displays all users in the database (Player1-4).
+In Program.cs there is a boolean to toggle test mode.
+- On: no forms will be opened, the program will run all database tests logging to the console and end.
+- Off: run the winform app as normal

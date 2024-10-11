@@ -25,9 +25,9 @@ namespace GameApp
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            List<string> tileList = DaoGame.GetMap(1);
+            // List<Tile> tileList = DaoGame.GetMap(1, 1);
             
-            lblTest.Text = string.Join(",\n", tileList);
+            // lblTest.Text = string.Join(",\n", tileList);
         }
     }
 }

@@ -15,10 +15,19 @@ namespace DAT601_Game
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            // Application.Run(new frmLogin());
-            Application.Run(GameManager.LoadLogin());
+            bool testMode = true;
+            if (testMode)
+            {
+                // Run database tests
+                Tester.Test();
+            }
+            else
+            {
+                // Run form version (potentially BROKEN from test changes)
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(GameManager.LoadLogin());
+            }
         }
     }
 }

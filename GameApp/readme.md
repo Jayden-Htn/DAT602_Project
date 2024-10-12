@@ -13,3 +13,6 @@ To run this project:
 In Program.cs there is a boolean to toggle test mode.
 - On: no forms will be opened, the program will run all database tests logging to the console and end.
 - Off: run the winform app as normal
+
+Note: ENSURE you have a clean setup on the database and procedures before running any tests, 
+as manipulations of the data will cause issues if re-run.

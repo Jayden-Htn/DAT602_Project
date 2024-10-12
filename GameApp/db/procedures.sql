@@ -19,7 +19,7 @@ begin
 		update tblPlayer
         set LoginAttempts = 0, `Online` = 1
         where Username = pUsername;
-        select 'Success' as 'Message';
+        select ID as 'Message' from tblPlayer where Username = pUsername;
     else
 		-- Failed login
 		if exists (select * from tblPlayer where Username = pUsername) then 
@@ -51,7 +51,7 @@ begin
 			end if;
 		else
 			-- No account found
-            select 'Invalid credentials' as 'Message';
+            select 'No account' as 'Message';
 		end if;
 	end if;
 end//
@@ -74,7 +74,8 @@ begin
 		-- Create user
         insert into tblPlayer (Username, `Password`)
 		values (pUsername, pPassword);
-		select 'Success' as 'Message';
+        
+		select ID as 'Message' from tblPlayer where Username = pUsername;
 	end if;
 end//
 delimiter ;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -21,8 +22,8 @@ namespace GameApp
         {
             var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection, 
                 $"call Login('{username}', '{password}')");
-            string message = (string)(dataSet.Tables[0].Rows[0])["Message"];
-            return message;
+            string? message = (dataSet.Tables[0].Rows[0])["Message"].ToString();
+            return String.IsNullOrEmpty(message) ? "No message" : message;
         }
 
         /// <summary>
@@ -35,8 +36,8 @@ namespace GameApp
         {
             var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection, 
                 $"call Register('{username}', '{password}')");
-            string message = (string)(dataSet.Tables[0].Rows[0])["Message"];
-            return message;
+            string? message = (dataSet.Tables[0].Rows[0])["Message"].ToString();
+            return String.IsNullOrEmpty(message) ? "No message" : message;
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace GameApp
         /// <param name="admin">New admin bit or null.</param>
         /// <param name="highScore">New high score or null.</param>
         /// <returns></returns>
-        static public string UpdatePlayer(int playerID, string? username, string? password, 
+        static public DataRow UpdatePlayer(int playerID, string? username, string? password, 
             int? locked, int? admin, int? highScore)
         {
             // Process null values (Doesn't accept C# null)
@@ -62,8 +63,8 @@ namespace GameApp
             var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection, 
                 $"call UpdatePlayer('{playerID}', {strUsername}, {strPassword}, {strLocked}, " +
                 $"{strAdmin}, {strHighScore})");
-            string? message = (dataSet.Tables[0].Rows[0]).ToString();
-            return !String.IsNullOrEmpty(message) ? message : "No Message";
+            DataRow? message = (dataSet.Tables[0].Rows[0]);
+            return message;
         }
         
         /// <summary>

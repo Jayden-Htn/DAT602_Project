@@ -33,14 +33,14 @@ namespace GameApp
             
             // Login procedure
             Debug.WriteLine("\n<==== 1. Login procedure tests ====>");
-            Debug.WriteLine(DaoUser.Login("Player1", "Password123")); // Output: 'Success'
+            Debug.WriteLine(DaoUser.Login("Player1", "Password123")); // Output: <Player ID>
             Debug.WriteLine(DaoUser.Login("Player1", "Password")); // Output: 'Invalid credentials'
-            Debug.WriteLine(DaoUser.Login("Player46", "Password123")); // Output: 'Invalid credentials'
+            Debug.WriteLine(DaoUser.Login("Player46", "Password123")); // Output: 'No account'
             Debug.WriteLine(DaoUser.Login("Player4", "Password123")); // Output: 'Locked out'
 
             // Register procedure
             Debug.WriteLine("\n<==== 2. Register procedure tests ====>");
-            Debug.WriteLine(DaoUser.Register("Player5", "Password123")); // Output: 'Success'
+            Debug.WriteLine(DaoUser.Register("Player5", "Password123")); // Output: <Player ID>
             Debug.WriteLine(DaoUser.Register("Player5", "Password123")); // Output: 'Duplicate'
 
             // Layout procedure

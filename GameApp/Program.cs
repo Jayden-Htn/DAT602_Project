@@ -15,7 +15,7 @@ namespace DAT601_Game
         [STAThread]
         static void Main()
         {
-            bool testMode = true;
+            bool testMode = false;
             if (testMode)
             {
                 // Run database tests
@@ -23,7 +23,7 @@ namespace DAT601_Game
             }
             else
             {
-                // Run form version (potentially BROKEN from test changes)
+                // Run form version
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(GameManager.LoadLogin());

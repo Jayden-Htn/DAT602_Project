@@ -5,15 +5,15 @@ use GameDB;
 -- <========== Login Procedure ==========>
 -- Inputs: username, password
 select * from tblPlayer where `Online` = 1; -- Return: no players online
-call Login('Player1', 'Password123'); -- Return Message: 'Success'
+call Login('Player1', 'Password123'); -- Return Message: <Player ID>
 call Login('Player1', 'Password'); -- Return Message: 'Invalid credentials'
-call Login('Player46', 'Password123'); -- Return Message: 'Invalid credentials'
+call Login('Player46', 'Password123'); -- Return Message: 'No account'
 call Login('Player4', 'Password123'); -- Return Message: 'Locked out'
 select * from tblPlayer where `Online` = 1; -- Return: only Player 1 as online
 
 -- <========== Register Procedure ==========>
 -- Inputs: username, password
-call Register('Player5', 'Password123'); -- Return Message: 'Success'
+call Register('Player5', 'Password123'); -- Return Message: <Player ID>
 call Register('Player5', 'Password123'); -- Return Message: 'Duplicate'
 
 -- <========== Layout Procedure ==========>

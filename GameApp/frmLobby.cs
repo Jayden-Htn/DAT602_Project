@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace GameApp
 {
@@ -30,6 +31,16 @@ namespace GameApp
         private void btnLogout_Click(object sender, EventArgs e)
         {
             GameManager.LoadNewPage("login");
+        }
+
+        private void btnAccount_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnInvite_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

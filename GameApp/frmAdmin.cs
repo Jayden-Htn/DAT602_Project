@@ -11,7 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace GameApp
 {
-    public partial class frmAdmin : Form
+    public partial class frmAdmin : FormBase
     {
         public frmAdmin()
         {

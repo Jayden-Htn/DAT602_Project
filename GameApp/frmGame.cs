@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace GameApp
 {
-    public partial class frmGame : Form
+    public partial class frmGame : FormBase
     {
         public frmGame()
         {

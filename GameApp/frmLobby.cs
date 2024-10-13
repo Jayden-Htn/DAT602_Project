@@ -11,11 +11,17 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace GameApp
 {
-    public partial class frmLobby : Form
+    public partial class frmLobby : FormBase
     {
         public frmLobby()
         {
             InitializeComponent();
+        }
+
+        public override void LoadData()
+        {
+            // Load data
+            lblPlayer.Text = $"Welcome {GameManager.Username}";
         }
 
         private void btnGame_Click(object sender, EventArgs e)

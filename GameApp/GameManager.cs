@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace GameApp
 {
@@ -14,7 +16,7 @@ namespace GameApp
         private static frmLobby _lobbyForm = new frmLobby();
         private static frmGame _gameForm = new frmGame();
         private static frmAdmin _adminForm = new frmAdmin();
-        private static Dictionary<string, Form> _forms = new Dictionary<string, Form>();
+        private static Dictionary<string, FormBase> _forms = new Dictionary<string, FormBase>();
 
         private static int _playerID = 0;
         private static int _gameID;
@@ -23,6 +25,7 @@ namespace GameApp
         private static int _highScore = 0;
 
         public static int PlayerID { get => _playerID; set => _playerID = value; }
+        public static string? Username { get => _username; set => _username = value; }
 
         /// <summary>
         /// Create form array and loan login form.
@@ -45,11 +48,12 @@ namespace GameApp
         /// <param name="newActiveForm">String key in forms dictionary.</param>
         public static void LoadNewPage(string newActiveForm)
         {
-            foreach (KeyValuePair<string, Form> form in _forms)
+            foreach (KeyValuePair<string, FormBase> form in _forms)
             {
                 form.Value.Hide();
             }
             _forms[newActiveForm].Show();
+            _forms[newActiveForm].LoadData(); // Make sure form has updated data
         }
 
         /// <summary>
@@ -59,9 +63,9 @@ namespace GameApp
         public static void SetPlayerData(DataRow data)
         {
             PlayerID = Convert.ToInt16(data["ID"]);
-            _username = Convert.ToString(data["Username"]);
+            Username = Convert.ToString(data["Username"]);
             _admin = Convert.ToInt16(data["Admin"]) == 1 ? true : false;
-            _highScore = Convert.ToInt16(data["HighScore"]);
+            _highScore = Convert.ToInt16(data["HighestScore"]);
         }
     }
 }

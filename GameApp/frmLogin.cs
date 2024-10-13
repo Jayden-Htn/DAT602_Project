@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace GameApp
 {
-    public partial class frmLogin : Form
+    public partial class frmLogin : FormBase
     {
         public frmLogin()
         {
@@ -24,39 +24,42 @@ namespace GameApp
             // Handle login message
             if (int.TryParse(data, out int ID))
             {
-                // Success, got player id
-                LoadLobby(ID);
-            }
-            else if (data == "Invalid credentials")
-            {
-                MessageBox.Show("Your email or password is incorrect.", data, MessageBoxButtons.OK);
-            }
-            else if (data == "No account")
-            {
-                DialogResult response = MessageBox.Show("No account found. Would you like to register as a new account?", 
-                    "Register?", MessageBoxButtons.OKCancel);
-                if (response == DialogResult.OK)
-                {
-                    string res = DaoUser.Register(username, password);
-                    if (int.TryParse(res, out int newID))
-                    {
-                        // Load lobby with new player
-                        LoadLobby(newID);
-                    } else
-                    {
-                        MessageBox.Show("Error making account.", res, MessageBoxButtons.OK);
-                    };
-                }
-            }
-            else if (data == "Locked out")
-            {
-                MessageBox.Show("Your account is locked, please contact an administrator at admin@survivorisland.com."
-                    , data, MessageBoxButtons.OK);
+                LoadLobby(ID); // Success, got player id, load lobby
             }
             else
             {
-                MessageBox.Show("Error: ", data, MessageBoxButtons.OK);
-            } 
+                switch (data)
+                {
+                    case "Invalid credentials":
+                        MessageBox.Show("Your email or password is incorrect.", "Invalid credentials", 
+                            MessageBoxButtons.OK);
+                        break;
+                    case "No account":
+                        DialogResult response = MessageBox.Show("No account found. Would you like to register " +
+                            "as a new account?", "Register?", MessageBoxButtons.OKCancel);
+                        if (response == DialogResult.OK)
+                        {
+                            string res = DaoUser.Register(username, password);
+                            if (int.TryParse(res, out int newID))
+                            {
+                                LoadLobby(newID); // Load lobby with new player
+                            }
+                            else
+                            {
+                                MessageBox.Show("Error making account.", res, MessageBoxButtons.OK);
+                            }
+                        }
+                        break;
+                    case "Locked out":
+                        MessageBox.Show("Your account is locked. Please contact an administrator at " +
+                            "admin@survivorisland.com.", "Locked out", MessageBoxButtons.OK);
+                        break;
+                    default:
+                        MessageBox.Show("Error: " + data, "Unknown Error", MessageBoxButtons.OK);
+                        break;
+                }
+            }
+
         }
 
         /// <summary>

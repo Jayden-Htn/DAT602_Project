@@ -17,14 +17,16 @@ call Register('Player5', 'Password123'); -- Return Message: <Player ID>
 call Register('Player5', 'Password123'); -- Return Message: 'Duplicate'
 
 -- <========== Layout Procedure ==========>
--- Inputs: PlayerID, GameID
+-- Inputs: CharacterID, GameID
 call Layout(1, 1); -- Return three unique tiles within 4 tiles of character (1,1) 
 -- Note: range to be modified to meet game implementation or can be removed
 
 -- <========== Generate Map Procedure ==========>
--- Inputs: MapID
+-- Inputs: MapID, output? bit
 delete from tblTile where MapID = 2;
-call GenerateMap(2); -- Return approx. 33 unique tiles (if 10x10 map)
+call GenerateMap(2, 1); -- Return approx. 33 unique tiles (if 10x10 map)
+-- Disabling output means this procedure can be called from another 
+-- procedure without affect its output
 
 -- <========== Move Player Procedure ==========>
 -- Inputs: CharacterID, GameID, NewTileCol, NewTileRow (use position as empty tiles don't have id)
@@ -44,7 +46,7 @@ select * from tblCharacter where ID = 1; -- Score is 20
 call UpdateScore(546, 20); -- Return Message: 'Player not found'
 
 -- <========== Interact (Pickup) Procedure ==========>
--- Inputs: CharacterID, MapID, ColPos, RowPos
+-- Inputs: CharacterID, GameID, ColPos, RowPos
 -- Note: if clicked tile matches own character position, call this instead of move
 select * from tblCharacter where ID = 1; -- Score 20, health 100
 call TileInteract(1, 1, 2, 1); -- Collects gem, Return Message: 'Success'
@@ -61,6 +63,7 @@ select * from tblInventory where CharacterID = 1; -- Now fruit in inventory too
 select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapID = 1 and IsNpc = 1; 
 	-- Gets one NPC, positions 6,2
 call NpcMove(1); -- Return Message: <number of NPCs moved>
+
 select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapID = 1 and IsNpc = 1; 
 	-- NPC should have moved to an adjacent tile 
 -- Note: won't move if hit map boundary or selects occupied tile, otherwise 100% chance

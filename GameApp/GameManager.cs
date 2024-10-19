@@ -23,9 +23,12 @@ namespace GameApp
         private static string? _username;
         private static bool _admin = false;
         private static int _highScore = 0;
+        private static int _opponentID = 2;
+        private static int _currentGameID;
 
         public static int PlayerID { get => _playerID; set => _playerID = value; }
         public static string? Username { get => _username; set => _username = value; }
+        public static int CurrentGameID { get => _currentGameID; set => _currentGameID = value; }
 
         /// <summary>
         /// Create form array and loan login form.
@@ -46,14 +49,14 @@ namespace GameApp
         /// Load a new page from the form dictionary.
         /// </summary>
         /// <param name="newActiveForm">String key in forms dictionary.</param>
-        public static void LoadNewPage(string newActiveForm)
+        public static void LoadNewPage(string newActiveForm, object? data = null)
         {
             foreach (KeyValuePair<string, FormBase> form in _forms)
             {
                 form.Value.Hide();
             }
             _forms[newActiveForm].Show();
-            _forms[newActiveForm].LoadData(); // Make sure form has updated data
+            _forms[newActiveForm].LoadData(data); // Make sure form has updated data
         }
 
         /// <summary>

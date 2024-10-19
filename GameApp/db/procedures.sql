@@ -84,7 +84,7 @@ delimiter ;
 delimiter //
 drop procedure if exists Layout//
 create definer = 'game'@'localhost' procedure Layout (
-	in pPlayerID varchar(255),
+	in pCharacterID varchar(255),
 	in pGameID varchar(255)
 )
 comment 'Lay out tiles on board around a players position'
@@ -96,7 +96,7 @@ begin
     select ColPosition, RowPosition
 	into xPos, yPos
 	from tblCharacter
-	where PlayerID = pPlayerID and GameID = pGameID;
+	where ID = pCharacterID and GameID = pGameID;
 	
     -- Find unique tiles in 4 tile radius
     -- Note: only special tiles are stored, empty tiles are not
@@ -112,7 +112,8 @@ delimiter ;
 delimiter //
 drop procedure if exists GenerateMap//
 create definer = 'game'@'localhost' procedure GenerateMap (
-	in pMapID varchar(255)
+	in pMapID varchar(255),
+    in pOutputToggle int
 )
 comment 'Generating unique tiles (items) in the map'
 begin
@@ -146,7 +147,9 @@ begin
 	end while;
     
     -- Return map
-    select * from tblTile where MapID = pMapID; 
+    if (pOutputToggle = 1) then
+		select * from tblTile where MapID = pMapID; 
+	end if;
 end//
 delimiter ;
 
@@ -237,16 +240,22 @@ delimiter //
 drop procedure if exists TileInteract//
 create definer = 'game'@'localhost' procedure TileInteract (
 	in pCharacterID int,
-    in pMapID int,
+    in pGameID int,
     in pColPos int,
     in pRowPos int
 )
 comment 'Character picking up or interacting with entities'
 begin	
 	declare tileType varchar(255) default 0;
+    declare mapID int;
+    
+    -- Get map id
+    select ID into mapID from tblMap where GameID = pGameID;
+    
     -- Get tile
     select TileTypeName into tileType from tblTile 
-		where MapID = pCharacterID and ColPosition = pColPos and RowPosition = pRowPos;
+		where MapID = mapID and ColPosition = pColPos and RowPosition = pRowPos;
+        
     -- Check if tile exists
 	if (tileType is not null and tileType != '0') then
 		if (select AddInventory from tblEntity where `Name` = tileType) then
@@ -259,6 +268,7 @@ begin
 			set Score = Score + (select ScoreEffect from tblEntity where `Name` = tileType), 
 				CurrentHealth = CurrentHealth + (select HealthEffect from tblEntity where `Name` = tileType)
 			where ID = pCharacterID;
+            
             -- Check new health isn't over max
             if (select CurrentHealth from tblCharacter where ID = pCharacterID) 
 				> (select MaxHealth from tblCharacter where ID = pCharacterID) then
@@ -267,9 +277,13 @@ begin
 				where ID = pCharacterID;
 			end if;
 		end if;
+        
         -- Remove tile (now empty)
-         delete from tblTile where MapID = pCharacterID and ColPosition = pColPos and RowPosition = pRowPos;
-         -- Check character isn't dead
+		set SQL_SAFE_UPDATES = 0; -- Error since where doesn't use tile key
+		delete from tblTile where MapID = mapID and ColPosition = pColPos and RowPosition = pRowPos;
+		set SQL_SAFE_UPDATES = 1;
+         
+		-- Check character isn't dead
 		if (select CurrentHealth from tblCharacter where ID = pCharacterID) <= 0 then
 			select "Character dead" as 'Message';
 		else
@@ -290,13 +304,13 @@ create definer = 'game'@'localhost' procedure NpcMove (
 )
 comment 'Move npcs (animals) randomly'
 begin	
-	declare done int default 0;
     declare tileID int;
     declare colPos int;
     declare rowPos int;
     declare colNew int;
     declare rowNew int;
     declare npcMovedCount int default 0;
+    declare done int default 0;
     
 	declare npcCursor cursor for
         select id, ColPosition, RowPosition 
@@ -310,10 +324,10 @@ begin
     -- Loop over npc tiles
     npcLoop: loop
 		-- Random chance each npc moves (currently 100%)
-		if (RAND() >= 0) then
+		if (RAND() >= 0) then        
 			-- Get interation values
 			fetch npcCursor into tileID,  colPos, rowPos;
-
+            
 			-- Exit loop if no more rows
 			if done then
 				leave npcLoop;
@@ -326,9 +340,11 @@ begin
             -- Check if tile empty (not stored)
 			if (not exists (select * from tblTile 
 				where MapID = pMapID and ColPosition = colNew and RowPosition = rowNew)) then
+                
 				-- Check if in map bounds
                 if colNew >= 1 and colNew <= (select MaxColumns from tblMap where ID = pMapID) and 
 					rowNew >= 1 and rowNew <= (select MaxRows from tblMap where ID = pMapID) then
+                    
 					-- Move NPC to new tile
                     update tblTile
 					set ColPosition = colNew, RowPosition = rowNew

@@ -36,7 +36,6 @@
             lblScore = new Label();
             txtChat = new TextBox();
             btnChat = new Button();
-            btnTest = new Button();
             lblTest = new Label();
             btnEatFruit = new Button();
             btnEatMeat = new Button();
@@ -44,6 +43,11 @@
             lblMeatLabel = new Label();
             lblFruitCount = new Label();
             lblMeatCount = new Label();
+            btnMoveCharacter = new Button();
+            lblPlayerPosition = new Label();
+            btnInteract = new Button();
+            btnMoveCharacter2 = new Button();
+            btnMoveNpcs = new Button();
             SuspendLayout();
             // 
             // btnExit
@@ -79,9 +83,9 @@
             lblHealth.AutoSize = true;
             lblHealth.Location = new Point(702, 388);
             lblHealth.Name = "lblHealth";
-            lblHealth.Size = new Size(37, 21);
+            lblHealth.Size = new Size(19, 21);
             lblHealth.TabIndex = 3;
-            lblHealth.Text = "100";
+            lblHealth.Text = "0";
             // 
             // lblScoreLabel
             // 
@@ -117,20 +121,10 @@
             btnChat.Text = "Send";
             btnChat.UseVisualStyleBackColor = true;
             // 
-            // btnTest
-            // 
-            btnTest.Location = new Point(175, 64);
-            btnTest.Name = "btnTest";
-            btnTest.Size = new Size(183, 31);
-            btnTest.TabIndex = 8;
-            btnTest.Text = "Get map data";
-            btnTest.UseVisualStyleBackColor = true;
-            btnTest.Click += btnTest_Click;
-            // 
             // lblTest
             // 
             lblTest.AutoSize = true;
-            lblTest.Location = new Point(209, 115);
+            lblTest.Location = new Point(23, 74);
             lblTest.Name = "lblTest";
             lblTest.Size = new Size(116, 21);
             lblTest.TabIndex = 9;
@@ -190,11 +184,64 @@
             lblMeatCount.TabIndex = 15;
             lblMeatCount.Text = "0";
             // 
+            // btnMoveCharacter
+            // 
+            btnMoveCharacter.Location = new Point(432, 26);
+            btnMoveCharacter.Name = "btnMoveCharacter";
+            btnMoveCharacter.Size = new Size(183, 31);
+            btnMoveCharacter.TabIndex = 8;
+            btnMoveCharacter.Text = "Col pos +1";
+            btnMoveCharacter.UseVisualStyleBackColor = true;
+            btnMoveCharacter.Click += btnMoveCharacter_Click;
+            // 
+            // lblPlayerPosition
+            // 
+            lblPlayerPosition.AutoSize = true;
+            lblPlayerPosition.Location = new Point(23, 26);
+            lblPlayerPosition.Name = "lblPlayerPosition";
+            lblPlayerPosition.Size = new Size(116, 21);
+            lblPlayerPosition.TabIndex = 16;
+            lblPlayerPosition.Text = "Player position:";
+            // 
+            // btnInteract
+            // 
+            btnInteract.Location = new Point(432, 123);
+            btnInteract.Name = "btnInteract";
+            btnInteract.Size = new Size(183, 31);
+            btnInteract.TabIndex = 17;
+            btnInteract.Text = "Interact with tile";
+            btnInteract.UseVisualStyleBackColor = true;
+            btnInteract.Click += btnInteract_Click;
+            // 
+            // btnMoveCharacter2
+            // 
+            btnMoveCharacter2.Location = new Point(432, 74);
+            btnMoveCharacter2.Name = "btnMoveCharacter2";
+            btnMoveCharacter2.Size = new Size(183, 31);
+            btnMoveCharacter2.TabIndex = 19;
+            btnMoveCharacter2.Text = "Row pos +1";
+            btnMoveCharacter2.UseVisualStyleBackColor = true;
+            btnMoveCharacter2.Click += btnMoveCharacter2_Click;
+            // 
+            // btnMoveNpcs
+            // 
+            btnMoveNpcs.Location = new Point(432, 173);
+            btnMoveNpcs.Name = "btnMoveNpcs";
+            btnMoveNpcs.Size = new Size(183, 31);
+            btnMoveNpcs.TabIndex = 18;
+            btnMoveNpcs.Text = "Move NPCs";
+            btnMoveNpcs.UseVisualStyleBackColor = true;
+            btnMoveNpcs.Click += btnMoveNpcs_Click;
+            // 
             // frmGame
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(944, 450);
+            Controls.Add(btnMoveCharacter2);
+            Controls.Add(btnMoveNpcs);
+            Controls.Add(btnInteract);
+            Controls.Add(lblPlayerPosition);
             Controls.Add(lblMeatCount);
             Controls.Add(lblFruitCount);
             Controls.Add(lblMeatLabel);
@@ -202,7 +249,7 @@
             Controls.Add(btnEatMeat);
             Controls.Add(btnEatFruit);
             Controls.Add(lblTest);
-            Controls.Add(btnTest);
+            Controls.Add(btnMoveCharacter);
             Controls.Add(btnChat);
             Controls.Add(txtChat);
             Controls.Add(lblScore);
@@ -227,7 +274,6 @@
         private Label lblScore;
         private TextBox txtChat;
         private Button btnChat;
-        private Button btnTest;
         private Label lblTest;
         private Button btnEatFruit;
         private Button btnEatMeat;
@@ -235,5 +281,10 @@
         private Label lblMeatLabel;
         private Label lblFruitCount;
         private Label lblMeatCount;
+        private Button btnMoveCharacter;
+        private Label lblPlayerPosition;
+        private Button btnInteract;
+        private Button btnMoveCharacter2;
+        private Button btnMoveNpcs;
     }
 }

@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Google.Protobuf.WellKnownTypes;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,9 +18,9 @@ namespace GameApp
         /// <param name="mapID">Map ID for the game.</param>
         /// <param name="playerID">Player to get tiles around.</param>
         /// <returns></returns>
-        static public List<Tile> GetMap(int mapID, int playerID)
+        static public List<Tile> GetMap(int characterID, int gameID)
         {
-            var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call Layout('{mapID}', '{playerID}')");
+            var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call Layout('{characterID}', '{gameID}')");
 
             // Create list of tiles
             List<Tile> tileList = new List<Tile>();
@@ -38,7 +39,7 @@ namespace GameApp
         /// <returns></returns>
         static public List<Tile> GenerateMap(int gameID)
         {
-            var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call GenerateMap('{gameID}')");
+            var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call GenerateMap('{gameID}', 1)");
 
             // Create list of tiles
             List<Tile> tileList = new List<Tile>();
@@ -119,6 +120,51 @@ namespace GameApp
             var strGameID = gameID.HasValue ? gameID.Value.ToString() : "null"; // Doesn't accept null
             var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call StopGame({strGameID})");
             string message = (string)(data.Tables[0].Rows[0])["Message"];
+            return message;
+        }
+
+        /// <summary>
+        /// Get the position, score and health of a player character in a game.
+        /// </summary>
+        /// <param name="playerID">Player character's ID.</param>
+        /// <returns></returns>
+        static public DataRow GetCharacterData(int characterID)
+        {
+            var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call GetCharacterData('{characterID}')");
+            DataRow message = data.Tables[0].Rows[0];
+            Debug.WriteLine("Data:", message);
+            return message;
+        }
+
+        /// <summary>
+        /// Find an existing game between a player and opponent player.
+        /// </summary>
+        /// <param name="playerID">Player's ID.</param>
+        /// <param name="OpponentID">Opponent player's ID.</param>
+        /// <returns></returns>
+        static public object FindGame(int playerID, int OpponentID)
+        {
+            var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call FindGame({playerID}, {OpponentID})");
+            if (data.Tables[0].Rows.Count == 0)
+            {
+                return "No game";
+            } else
+            {
+                DataRow message = data.Tables[0].Rows[0];
+                return message;
+            }
+        }
+
+        /// <summary>
+        /// Create a new game including characters and map.
+        /// </summary>
+        /// <param name="playerID">Player's ID.</param>
+        /// <param name="OpponentID">Opponent player's ID.</param>
+        /// <returns></returns>
+        static public DataRow NewGame(int playerID, int OpponentID)
+        {
+            var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call StartGame({playerID}, {OpponentID})");
+            DataRow message = data.Tables[0].Rows[0];
             return message;
         }
     }

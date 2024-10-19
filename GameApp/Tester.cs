@@ -18,6 +18,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.Data;
 
 namespace GameApp
 {
@@ -30,7 +31,7 @@ namespace GameApp
             DaoUser.Login("Player1", "Password123"); // Establish connection first for cleaner output
             
             Debug.WriteLine("\n\n\n\n<======== STARTING DATABASE TESTING ========>");
-            
+
             // Login procedure
             Debug.WriteLine("\n<==== 1. Login procedure tests ====>");
             Debug.WriteLine(DaoUser.Login("Player1", "Password123")); // Output: <Player ID>

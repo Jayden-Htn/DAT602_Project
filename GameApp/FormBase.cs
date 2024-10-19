@@ -17,9 +17,9 @@ namespace GameApp
             InitializeComponent();
         }
 
-        public virtual void LoadData()
+        public virtual void LoadData(object? data = null)
         {
-            // Overwrite or do nothing
+            // Only override if needed
         }
     }
 }

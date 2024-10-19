@@ -5,8 +5,9 @@
 To run this project:
 1. Load Solution into Visual Studio
 2. Run /db/start.sql to initialise the database
-3. Run /db/procedures.sql to create the procedures
-4. Run the program
+3. Run /db/procedures.sql to create the main procedures
+4. Run /db/procedures_extra_.sql to create extra required procedures
+5. Run the program
 
 ## Run Modes
 

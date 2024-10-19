@@ -18,6 +18,19 @@ namespace GameApp
             InitializeComponent();
         }
 
+        public override void LoadData(object? data = null)
+        {
+            if (data is DataRow details)
+            {
+                UpdateData();
+            }
+        }
+
+        public void UpdateData()
+        {
+
+        }
+
         private void btnListPlayers_Click(object sender, EventArgs e)
         {
             List<string> data = DaoAdmin.GetAllPlayers();

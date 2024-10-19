@@ -30,16 +30,16 @@
         {
             lblHeading = new Label();
             btnAdmin = new Button();
-            btnGame = new Button();
+            btnStartGame = new Button();
             btnLogout = new Button();
             btnAccount = new Button();
             lblHeading2 = new Label();
             lblPlayer = new Label();
-            dataGridView1 = new DataGridView();
-            dataGridView2 = new DataGridView();
+            dgvOnlinePlayers = new DataGridView();
+            dgvGameInvites = new DataGridView();
             btnInvite = new Button();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvOnlinePlayers).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvGameInvites).BeginInit();
             SuspendLayout();
             // 
             // lblHeading
@@ -62,15 +62,15 @@
             btnAdmin.UseVisualStyleBackColor = true;
             btnAdmin.Click += btnAdmin_Click;
             // 
-            // btnGame
+            // btnStartGame
             // 
-            btnGame.Location = new Point(426, 394);
-            btnGame.Name = "btnGame";
-            btnGame.Size = new Size(102, 31);
-            btnGame.TabIndex = 2;
-            btnGame.Text = "Start Game";
-            btnGame.UseVisualStyleBackColor = true;
-            btnGame.Click += btnGame_Click;
+            btnStartGame.Location = new Point(431, 394);
+            btnStartGame.Name = "btnStartGame";
+            btnStartGame.Size = new Size(102, 31);
+            btnStartGame.TabIndex = 2;
+            btnStartGame.Text = "Start Game";
+            btnStartGame.UseVisualStyleBackColor = true;
+            btnStartGame.Click += btnStartGame_Click;
             // 
             // btnLogout
             // 
@@ -111,23 +111,23 @@
             lblPlayer.TabIndex = 6;
             lblPlayer.Text = "Welcome";
             // 
-            // dataGridView1
+            // dgvOnlinePlayers
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(29, 106);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 56;
-            dataGridView1.Size = new Size(280, 269);
-            dataGridView1.TabIndex = 7;
+            dgvOnlinePlayers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvOnlinePlayers.Location = new Point(29, 106);
+            dgvOnlinePlayers.Name = "dgvOnlinePlayers";
+            dgvOnlinePlayers.RowHeadersWidth = 56;
+            dgvOnlinePlayers.Size = new Size(280, 269);
+            dgvOnlinePlayers.TabIndex = 7;
             // 
-            // dataGridView2
+            // dgvGameInvites
             // 
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(348, 106);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.RowHeadersWidth = 56;
-            dataGridView2.Size = new Size(280, 269);
-            dataGridView2.TabIndex = 8;
+            dgvGameInvites.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvGameInvites.Location = new Point(348, 106);
+            dgvGameInvites.Name = "dgvGameInvites";
+            dgvGameInvites.RowHeadersWidth = 56;
+            dgvGameInvites.Size = new Size(280, 269);
+            dgvGameInvites.TabIndex = 8;
             // 
             // btnInvite
             // 
@@ -145,19 +145,19 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(btnInvite);
-            Controls.Add(dataGridView2);
-            Controls.Add(dataGridView1);
+            Controls.Add(dgvGameInvites);
+            Controls.Add(dgvOnlinePlayers);
             Controls.Add(lblPlayer);
             Controls.Add(lblHeading2);
             Controls.Add(btnAccount);
             Controls.Add(btnLogout);
-            Controls.Add(btnGame);
+            Controls.Add(btnStartGame);
             Controls.Add(btnAdmin);
             Controls.Add(lblHeading);
             Name = "frmLobby";
             Text = "Lobby";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvOnlinePlayers).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvGameInvites).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -166,13 +166,13 @@
 
         private Label lblHeading;
         private Button btnAdmin;
-        private Button btnGame;
+        private Button btnStartGame;
         private Button btnLogout;
         private Button btnAccount;
         private Label lblHeading2;
         private Label lblPlayer;
-        private DataGridView dataGridView1;
-        private DataGridView dataGridView2;
+        private DataGridView dgvOnlinePlayers;
+        private DataGridView dgvGameInvites;
         private Button btnInvite;
     }
 }

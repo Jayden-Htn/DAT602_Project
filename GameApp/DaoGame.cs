@@ -23,7 +23,7 @@ namespace GameApp
             var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call Layout('{characterID}', '{gameID}')");
 
             // Create list of tiles
-            List<objTile> tileList = new List<objTile>();
+            List<objTile> tileList = [];
             foreach (var tile in System.Data.DataTableExtensions.AsEnumerable(data.Tables[0]))
             {
                 tileList.Add(new objTile((int)tile["ID"], (int)tile["MapID"], (int)tile["ColPosition"], 
@@ -42,7 +42,7 @@ namespace GameApp
             var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call GenerateMap('{gameID}', 1)");
 
             // Create list of tiles
-            List<objTile> tileList = new List<objTile>();
+            List<objTile> tileList = [];
             foreach (var tile in System.Data.DataTableExtensions.AsEnumerable(data.Tables[0]))
             {
                 tileList.Add(new objTile((int)tile["ID"], (int)tile["MapID"], (int)tile["ColPosition"], 
@@ -132,7 +132,6 @@ namespace GameApp
         {
             var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call GetCharacterData('{characterID}')");
             DataRow message = data.Tables[0].Rows[0];
-            Debug.WriteLine("Data:", message);
             return message;
         }
 

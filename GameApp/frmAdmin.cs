@@ -15,10 +15,10 @@ namespace GameApp
 {
     public partial class frmAdmin : FormBase
     {
-        private List<objPlayer> _playerObjects = new List<objPlayer>();
-        private List<string> _playerStrings = new List<string>();
-        private List<objGame> _gameObjects = new List<objGame>();
-        private List<string> _gameStrings = new List<string>();
+        private List<objPlayer> _playerObjects = [];
+        private List<string> _playerStrings = [];
+        private List<objGame> _gameObjects = [];
+        private List<string> _gameStrings = [];
 
         public frmAdmin()
         {
@@ -55,13 +55,13 @@ namespace GameApp
 
         private void btnEditPlayer_Click(object sender, EventArgs e)
         {
-            var result = daoUser.UpdatePlayer(1, "SuperVader", null, null, null, null);
+            daoUser.UpdatePlayer(1, "SuperVader", null, null, null, null);
             UpdateData();
         }
 
         private void btnAddPlayer_Click(object sender, EventArgs e)
         {
-            var result = daoUser.Register("MegaX", "Password123");
+            daoUser.Register("MegaX", "Password123");
             MessageBox.Show("New user created", "User Creation");
             UpdateData();
         }
@@ -70,7 +70,7 @@ namespace GameApp
         {
             int index = lstPlayers.SelectedIndex;
             objPlayer player = _playerObjects[index];
-            var result = daoUser.DeletePlayer(player.ID);
+            daoUser.DeletePlayer(player.ID);
             UpdateData();
         }
 
@@ -78,13 +78,13 @@ namespace GameApp
         {
             int index = lstGames.SelectedIndex;
             objGame game = _gameObjects[index];
-            var result = daoGame.StopGame(game.ID);
+            daoGame.StopGame(game.ID);
             UpdateData();
         }
 
         private void btnEndAllGames_Click(object sender, EventArgs e)
         {
-            var result = daoGame.StopGame(null);
+            daoGame.StopGame(null);
             UpdateData();
         }
 

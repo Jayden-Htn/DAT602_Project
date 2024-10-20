@@ -24,8 +24,6 @@ namespace GameApp
         private int _score = 0;
         private int _health;
 
-        private List<objTile> _mapTiles;
-
         public frmGame()
         {
             InitializeComponent();
@@ -61,7 +59,6 @@ namespace GameApp
             _health = Convert.ToInt16(details["CurrentHealth"]);
 
             // Display on screen
-            _mapTiles = tileList.ToList();
             lblTest.Text = string.Join(",\n", tileList);
             lblPlayerPosition.Text = $"Player position: {_colPosition}, {_rowPosition}";
             lblHealth.Text = _health.ToString();
@@ -76,20 +73,20 @@ namespace GameApp
         private void btnMoveCharacter_Click(object sender, EventArgs e)
         {
             int newCol = _colPosition + 1;
-            var result = daoGame.MovePlayer(_characterID, _gameID, newCol, _rowPosition);
+            daoGame.MovePlayer(_characterID, _gameID, newCol, _rowPosition);
             UpdateBoard();
         }
 
         private void btnMoveCharacter2_Click(object sender, EventArgs e)
         {
             int newRow = _rowPosition + 1;
-            var result = daoGame.MovePlayer(_characterID, _gameID, _colPosition, newRow);
+            daoGame.MovePlayer(_characterID, _gameID, _colPosition, newRow);
             UpdateBoard();
         }
 
         private void btnInteract_Click(object sender, EventArgs e)
         {
-            var result = daoGame.TileInteract(_characterID, _gameID, _colPosition, _rowPosition);
+            daoGame.TileInteract(_characterID, _gameID, _colPosition, _rowPosition);
             UpdateBoard();
         }
 

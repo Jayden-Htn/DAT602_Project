@@ -20,7 +20,7 @@ namespace GameApp
         {
             var dataset = MySqlHelper.ExecuteDataset(mySqlConnection, "call GetActivePlayers()");
             
-            List<objPlayer> playerList = new List<objPlayer>();
+            List<objPlayer> playerList = [];
             foreach (var data in System.Data.DataTableExtensions.AsEnumerable(dataset.Tables[0]))
             {
                 playerList.Add(new objPlayer((int)data["ID"], (string)data["Username"], (int)data["HighestScore"]));
@@ -36,7 +36,7 @@ namespace GameApp
         {
             var dataset = MySqlHelper.ExecuteDataset(mySqlConnection, "call GetGames()");
 
-            List<objGame> gameList = new List<objGame>();
+            List<objGame> gameList = [];
             foreach (var data in System.Data.DataTableExtensions.AsEnumerable(dataset.Tables[0]))
             {
                 gameList.Add(new objGame((int)data["ID"], (string)data["Username1"], (string)data["Username2"]));

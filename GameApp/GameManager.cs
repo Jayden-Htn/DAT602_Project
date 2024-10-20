@@ -12,18 +12,15 @@ namespace GameApp
 {
     internal static class GameManager
     {
-        private static frmLogin _loginForm = new frmLogin();
-        private static frmLobby _lobbyForm = new frmLobby();
-        private static frmGame _gameForm = new frmGame();
-        private static frmAdmin _adminForm = new frmAdmin();
-        private static Dictionary<string, FormBase> _forms = new Dictionary<string, FormBase>();
+        private static frmLogin _loginForm = new();
+        private static frmLobby _lobbyForm = new();
+        private static frmGame _gameForm = new();
+        private static frmAdmin _adminForm = new();
+        private static Dictionary<string, FormBase> _forms = [];
 
         private static int _playerID = 0;
-        private static int _gameID;
         private static string? _username;
         private static bool _admin = false;
-        private static int _highScore = 0;
-        private static int _opponentID = 2;
         private static int _currentGameID;
 
         public static int PlayerID { get => _playerID; set => _playerID = value; }
@@ -68,7 +65,6 @@ namespace GameApp
             PlayerID = Convert.ToInt16(data["ID"]);
             Username = Convert.ToString(data["Username"]);
             _admin = Convert.ToInt16(data["Admin"]) == 1 ? true : false;
-            _highScore = Convert.ToInt16(data["HighestScore"]);
         }
     }
 }

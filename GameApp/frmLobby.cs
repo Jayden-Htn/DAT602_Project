@@ -30,14 +30,14 @@ namespace GameApp
             // Would get ID of opponent player selected, defaulting to player 2 for now
             int opponentPlayerID = 2;
 
-            // Find game with both self ID and opponent ID
-            object result = DaoGame.FindGame(GameManager.PlayerID, opponentPlayerID); 
+            // Find game with both own ID and opponent ID
+            object result = daoGame.FindGame(GameManager.PlayerID, opponentPlayerID); 
             
             // Result is DataRow if found game, string if not
             if (result is string message)
             {
                 // No game found, start new game
-                result = DaoGame.NewGame(GameManager.PlayerID, opponentPlayerID);
+                result = daoGame.NewGame(GameManager.PlayerID, opponentPlayerID);
             }
 
             DataRow data = (DataRow)result; // Convert objects to DataRow

@@ -2,7 +2,7 @@
 
 use GameDB;
 
--- <========== 1. Get Character Data Procedure ==========>
+-- <========== 1e. Get Character Data Procedure ==========>
 delimiter //
 drop procedure if exists GetCharacterData//
 create definer = 'game'@'localhost' procedure GetCharacterData (
@@ -21,7 +21,7 @@ end//
 delimiter ;
 
 
--- <========== 2. Find Game Procedure ==========>
+-- <========== 2e. Find Game Procedure ==========>
 delimiter //
 drop procedure if exists FindGame//
 create definer = 'game'@'localhost' procedure FindGame (
@@ -41,7 +41,7 @@ end//
 delimiter ;
 
 
--- <========== 3. Start Game Procedure ==========>
+-- <========== 3e. Start Game Procedure ==========>
 delimiter //
 drop procedure if exists StartGame//
 create definer = 'game'@'localhost' procedure StartGame (
@@ -78,5 +78,34 @@ begin
 		Score, CurrentHealth, m.ID as 'MapID' from tblCharacter c
     join tblMap m on c.GameID = m.GameID
     where PlayerID = pPlayerID and c.GameID = vGameID;
+end//
+delimiter ;
+
+
+-- <========== 4e. Get Active Players Procedure ==========>
+delimiter //
+drop procedure if exists GetActivePlayers//
+create definer = 'game'@'localhost' procedure GetActivePlayers ()
+comment 'Get all active players'
+begin
+	select ID, Username, HighestScore from tblPlayer where `Online` = 1;
+end//
+delimiter ;
+
+
+-- <========== 5e. Get Games Procedure ==========>
+delimiter //
+drop procedure if exists GetGames//
+create definer = 'game'@'localhost' procedure GetGames ()
+comment 'Get all games'
+begin 
+	-- Get game id and both player usernames for each game
+	select g.GameID as 'ID', p1.Username as 'Username1', p2.Username as 'Username2'
+    from tblGame g
+    join tblCharacter c1 on g.GameID = c1.GameID
+    join tblCharacter c2 on g.GameID = c2.GameID and c2.PlayerID > c1.PlayerID
+    join tblPlayer p1 on c1.PlayerID = p1.ID
+    join tblPlayer p2 on c2.PlayerID = p2.ID;
+    -- > check removes all extra combinations
 end//
 delimiter ;

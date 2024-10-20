@@ -16,7 +16,7 @@ namespace GameApp
             // Get inputs and attempt login
             String username = txtUsername.Text;
             String password = txtPassword.Text;
-            string data = DaoUser.Login(username, password);
+            string data = daoUser.Login(username, password);
 
             txtUsername.Text = "";
             txtPassword.Text = "";
@@ -39,7 +39,7 @@ namespace GameApp
                             "as a new account?", "Register?", MessageBoxButtons.OKCancel);
                         if (response == DialogResult.OK)
                         {
-                            string res = DaoUser.Register(username, password);
+                            string res = daoUser.Register(username, password);
                             if (int.TryParse(res, out int newID))
                             {
                                 LoadLobby(newID); // Load lobby with new player
@@ -69,7 +69,7 @@ namespace GameApp
         private void LoadLobby(int ID)
         {
             // Use update with all nulls as a get
-            DataRow playerData = DaoUser.UpdatePlayer(ID, null, null, null, null, null);
+            DataRow playerData = daoUser.UpdatePlayer(ID, null, null, null, null, null);
             GameManager.SetPlayerData(playerData);
             GameManager.LoadNewPage("lobby");
         }

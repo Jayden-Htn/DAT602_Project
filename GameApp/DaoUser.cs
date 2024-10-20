@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameApp
 {
-    internal class DaoUser : DataAccess
+    internal class daoUser : DataAccess
     {
         /// <summary>
         /// Log into an existing account.

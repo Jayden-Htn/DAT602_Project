@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameApp
 {
-    internal class Tile
+    internal class objTile
     {
         private int _id;
         private int _mapID;
@@ -14,7 +14,7 @@ namespace GameApp
         private int _rowPosition;
         private string _tileType;
 
-        public Tile(int id, int mapId, int colPosition, int rowPosition, string tileType)
+        public objTile(int id, int mapId, int colPosition, int rowPosition, string tileType)
         {
             _id = id;
             _mapID = mapId;

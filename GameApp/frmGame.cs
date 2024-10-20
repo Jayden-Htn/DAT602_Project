@@ -24,7 +24,7 @@ namespace GameApp
         private int _score = 0;
         private int _health;
 
-        private List<Tile> _mapTiles;
+        private List<objTile> _mapTiles;
 
         public frmGame()
         {
@@ -50,17 +50,17 @@ namespace GameApp
 
         private void UpdateBoard()
         {
-            // Board
-            List<Tile> tileList = DaoGame.GetMap(_characterID, _gameID);
+            // Get board
+            List<objTile> tileList = daoGame.GetMap(_characterID, _gameID);
 
-            // Character
-            var details = DaoGame.GetCharacterData(_characterID);
+            // Get character stats
+            var details = daoGame.GetCharacterData(_characterID);
             _colPosition = Convert.ToInt16(details["ColPosition"]);
             _rowPosition = Convert.ToInt16(details["RowPosition"]);
             _score = Convert.ToInt16(details["Score"]);
             _health = Convert.ToInt16(details["CurrentHealth"]);
 
-            // Display
+            // Display on screen
             _mapTiles = tileList.ToList();
             lblTest.Text = string.Join(",\n", tileList);
             lblPlayerPosition.Text = $"Player position: {_colPosition}, {_rowPosition}";
@@ -76,26 +76,26 @@ namespace GameApp
         private void btnMoveCharacter_Click(object sender, EventArgs e)
         {
             int newCol = _colPosition + 1;
-            var result = DaoGame.MovePlayer(_characterID, _gameID, newCol, _rowPosition);
+            var result = daoGame.MovePlayer(_characterID, _gameID, newCol, _rowPosition);
             UpdateBoard();
         }
 
         private void btnMoveCharacter2_Click(object sender, EventArgs e)
         {
             int newRow = _rowPosition + 1;
-            var result = DaoGame.MovePlayer(_characterID, _gameID, _colPosition, newRow);
+            var result = daoGame.MovePlayer(_characterID, _gameID, _colPosition, newRow);
             UpdateBoard();
         }
 
         private void btnInteract_Click(object sender, EventArgs e)
         {
-            var result = DaoGame.TileInteract(_characterID, _gameID, _colPosition, _rowPosition);
+            var result = daoGame.TileInteract(_characterID, _gameID, _colPosition, _rowPosition);
             UpdateBoard();
         }
 
         private void btnMoveNpcs_Click(object sender, EventArgs e)
         {
-            var response = DaoGame.NpcMove(_gameID); // Switch from map id to game id in sql
+            var response = daoGame.NpcMove(_mapID);
             MessageBox.Show(response);
             UpdateBoard();
         }

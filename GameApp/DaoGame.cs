@@ -10,23 +10,23 @@ using System.Threading.Tasks;
 
 namespace GameApp
 {
-    internal class DaoGame : DataAccess
+    internal class daoGame : DataAccess
     {
         /// <summary>
         /// Get map tiles around a player.
         /// </summary>
-        /// <param name="mapID">Map ID for the game.</param>
-        /// <param name="playerID">Player to get tiles around.</param>
+        /// <param name="characterID">Player to get tiles around.</param>
+        /// /// <param name="gameID">Map ID for the game.</param>
         /// <returns></returns>
-        static public List<Tile> GetMap(int characterID, int gameID)
+        static public List<objTile> GetMap(int characterID, int gameID)
         {
             var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call Layout('{characterID}', '{gameID}')");
 
             // Create list of tiles
-            List<Tile> tileList = new List<Tile>();
+            List<objTile> tileList = new List<objTile>();
             foreach (var tile in System.Data.DataTableExtensions.AsEnumerable(data.Tables[0]))
             {
-                tileList.Add(new Tile((int)tile["ID"], (int)tile["MapID"], (int)tile["ColPosition"], 
+                tileList.Add(new objTile((int)tile["ID"], (int)tile["MapID"], (int)tile["ColPosition"], 
                     (int)tile["RowPosition"], (string)tile["TileTypeName"]));
             }
             return tileList;
@@ -37,15 +37,15 @@ namespace GameApp
         /// </summary>
         /// <param name="gameID">Game ID to generate a map for.</param>
         /// <returns></returns>
-        static public List<Tile> GenerateMap(int gameID)
+        static public List<objTile> GenerateMap(int gameID)
         {
             var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call GenerateMap('{gameID}', 1)");
 
             // Create list of tiles
-            List<Tile> tileList = new List<Tile>();
+            List<objTile> tileList = new List<objTile>();
             foreach (var tile in System.Data.DataTableExtensions.AsEnumerable(data.Tables[0]))
             {
-                tileList.Add(new Tile((int)tile["ID"], (int)tile["MapID"], (int)tile["ColPosition"], 
+                tileList.Add(new objTile((int)tile["ID"], (int)tile["MapID"], (int)tile["ColPosition"], 
                     (int)tile["RowPosition"], (string)tile["TileTypeName"]));
             }
             return tileList;

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,6 +15,11 @@ namespace GameApp
 {
     public partial class frmAdmin : FormBase
     {
+        private List<objPlayer> _playerObjects = new List<objPlayer>();
+        private List<string> _playerStrings = new List<string>();
+        private List<objGame> _gameObjects = new List<objGame>();
+        private List<string> _gameStrings = new List<string>();
+
         public frmAdmin()
         {
             InitializeComponent();
@@ -20,23 +27,65 @@ namespace GameApp
 
         public override void LoadData(object? data = null)
         {
-            if (data is DataRow details)
+            UpdateData();
+        }
+
+        private void UpdateData()
+        {
+            // List active players
+            _playerObjects = daoAdmin.GetActivePlayers();
+            _playerStrings.Clear();
+            foreach (objPlayer player in _playerObjects)
             {
-                UpdateData();
+                _playerStrings.Add(player.ToString());
             }
+            lstPlayers.DataSource = null;
+            lstPlayers.DataSource = _playerStrings;
+
+            // List games
+            _gameObjects = daoAdmin.GetGames();
+            _gameStrings.Clear();
+            foreach (objGame game in _gameObjects)
+            {
+                _gameStrings.Add(game.ToString());
+            }
+            lstGames.DataSource = null;
+            lstGames.DataSource = _gameStrings;
         }
 
-        public void UpdateData()
+        private void btnEditPlayer_Click(object sender, EventArgs e)
         {
-
+            var result = daoUser.UpdatePlayer(1, "SuperVader", null, null, null, null);
+            UpdateData();
         }
 
-        private void btnListPlayers_Click(object sender, EventArgs e)
+        private void btnAddPlayer_Click(object sender, EventArgs e)
         {
-            List<string> data = DaoAdmin.GetAllPlayers();
-            // string players = string.Join(", ", data);
-            lstPlayers.Items.Clear();
-            lstPlayers.DataSource = data;
+            var result = daoUser.Register("MegaX", "Password123");
+            MessageBox.Show("New user created", "User Creation");
+            UpdateData();
+        }
+
+        private void btnDeletePlayer_Click(object sender, EventArgs e)
+        {
+            int index = lstPlayers.SelectedIndex;
+            objPlayer player = _playerObjects[index];
+            var result = daoUser.DeletePlayer(player.ID);
+            UpdateData();
+        }
+
+        private void btnEndGame_Click(object sender, EventArgs e)
+        {
+            int index = lstGames.SelectedIndex;
+            objGame game = _gameObjects[index];
+            var result = daoGame.StopGame(game.ID);
+            UpdateData();
+        }
+
+        private void btnEndAllGames_Click(object sender, EventArgs e)
+        {
+            var result = daoGame.StopGame(null);
+            UpdateData();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -45,3 +94,4 @@ namespace GameApp
         }
     }
 }
+

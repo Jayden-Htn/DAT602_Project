@@ -62,7 +62,7 @@ select * from tblInventory where CharacterID = 1; -- Now fruit in inventory too
 -- Inputs: MapID
 select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapID = 1 and IsNpc = 1; 
 	-- Gets one NPC, positions 6,2
-call NpcMove(1); -- Return Message: <number of NPCs moved>
+call NpcMove(3); -- Return Message: <number of NPCs moved>
 
 select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapID = 1 and IsNpc = 1; 
 	-- NPC should have moved to an adjacent tile 

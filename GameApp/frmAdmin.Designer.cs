@@ -32,30 +32,33 @@
             btnDeletePlayer = new Button();
             lstPlayers = new ListBox();
             btnClose = new Button();
-            btnListPlayers = new Button();
-            listBox1 = new ListBox();
-            button1 = new Button();
+            btnEditPlayer = new Button();
+            lstGames = new ListBox();
+            btnEndGame = new Button();
             label2 = new Label();
             label3 = new Label();
+            btnEndAllGames = new Button();
             SuspendLayout();
             // 
             // btnAddPlayer
             // 
-            btnAddPlayer.Location = new Point(159, 344);
+            btnAddPlayer.Location = new Point(159, 395);
             btnAddPlayer.Name = "btnAddPlayer";
-            btnAddPlayer.Size = new Size(102, 31);
+            btnAddPlayer.Size = new Size(112, 31);
             btnAddPlayer.TabIndex = 0;
             btnAddPlayer.Text = "Add Player";
             btnAddPlayer.UseVisualStyleBackColor = true;
+            btnAddPlayer.Click += btnAddPlayer_Click;
             // 
             // btnDeletePlayer
             // 
-            btnDeletePlayer.Location = new Point(94, 395);
+            btnDeletePlayer.Location = new Point(159, 344);
             btnDeletePlayer.Name = "btnDeletePlayer";
-            btnDeletePlayer.Size = new Size(102, 31);
+            btnDeletePlayer.Size = new Size(112, 31);
             btnDeletePlayer.TabIndex = 1;
             btnDeletePlayer.Text = "Delete Player";
             btnDeletePlayer.UseVisualStyleBackColor = true;
+            btnDeletePlayer.Click += btnDeletePlayer_Click;
             // 
             // lstPlayers
             // 
@@ -68,7 +71,7 @@
             // 
             // btnClose
             // 
-            btnClose.Location = new Point(663, 384);
+            btnClose.Location = new Point(512, 407);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(102, 31);
             btnClose.TabIndex = 4;
@@ -76,33 +79,34 @@
             btnClose.UseVisualStyleBackColor = true;
             btnClose.Click += btnClose_Click;
             // 
-            // btnListPlayers
+            // btnEditPlayer
             // 
-            btnListPlayers.Location = new Point(35, 344);
-            btnListPlayers.Name = "btnListPlayers";
-            btnListPlayers.Size = new Size(102, 31);
-            btnListPlayers.TabIndex = 5;
-            btnListPlayers.Text = "List Players";
-            btnListPlayers.UseVisualStyleBackColor = true;
-            btnListPlayers.Click += btnListPlayers_Click;
+            btnEditPlayer.Location = new Point(26, 344);
+            btnEditPlayer.Name = "btnEditPlayer";
+            btnEditPlayer.Size = new Size(112, 31);
+            btnEditPlayer.TabIndex = 5;
+            btnEditPlayer.Text = "Edit Player";
+            btnEditPlayer.UseVisualStyleBackColor = true;
+            btnEditPlayer.Click += btnEditPlayer_Click;
             // 
-            // listBox1
+            // lstGames
             // 
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 21;
-            listBox1.Location = new Point(351, 69);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(273, 256);
-            listBox1.TabIndex = 6;
+            lstGames.FormattingEnabled = true;
+            lstGames.ItemHeight = 21;
+            lstGames.Location = new Point(351, 69);
+            lstGames.Name = "lstGames";
+            lstGames.Size = new Size(273, 256);
+            lstGames.TabIndex = 6;
             // 
-            // button1
+            // btnEndGame
             // 
-            button1.Location = new Point(472, 356);
-            button1.Name = "button1";
-            button1.Size = new Size(102, 31);
-            button1.TabIndex = 7;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
+            btnEndGame.Location = new Point(351, 355);
+            btnEndGame.Name = "btnEndGame";
+            btnEndGame.Size = new Size(102, 31);
+            btnEndGame.TabIndex = 7;
+            btnEndGame.Text = "End Game";
+            btnEndGame.UseVisualStyleBackColor = true;
+            btnEndGame.Click += btnEndGame_Click;
             // 
             // label2
             // 
@@ -124,16 +128,27 @@
             label3.TabIndex = 9;
             label3.Text = "Active Games";
             // 
+            // btnEndAllGames
+            // 
+            btnEndAllGames.Location = new Point(498, 355);
+            btnEndAllGames.Name = "btnEndAllGames";
+            btnEndAllGames.Size = new Size(126, 31);
+            btnEndAllGames.TabIndex = 10;
+            btnEndAllGames.Text = "End All Games";
+            btnEndAllGames.UseVisualStyleBackColor = true;
+            btnEndAllGames.Click += btnEndAllGames_Click;
+            // 
             // frmAdmin
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnEndAllGames);
             Controls.Add(label3);
             Controls.Add(label2);
-            Controls.Add(button1);
-            Controls.Add(listBox1);
-            Controls.Add(btnListPlayers);
+            Controls.Add(btnEndGame);
+            Controls.Add(lstGames);
+            Controls.Add(btnEditPlayer);
             Controls.Add(btnClose);
             Controls.Add(lstPlayers);
             Controls.Add(btnDeletePlayer);
@@ -150,10 +165,11 @@
         private Button btnDeletePlayer;
         private ListBox lstPlayers;
         private Button btnClose;
-        private Button btnListPlayers;
-        private ListBox listBox1;
-        private Button button1;
+        private Button btnEditPlayer;
+        private ListBox lstGames;
+        private Button btnEndGame;
         private Label label2;
         private Label label3;
+        private Button btnEndAllGames;
     }
 }

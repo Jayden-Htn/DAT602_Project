@@ -9,6 +9,12 @@ To run this project:
 4. Run /db/procedures_extra_.sql to create extra required procedures
 5. Run the program
 
+Note: if testing procedure, you may need to reset the database or errors may occur.
+
+Suggested user accounts for testing:
+1. U: "Player1", P: "Password123" (existing game)
+2. U: "Player3", P: "Password123" (no game)
+
 ## Run Modes
 
 In Program.cs there is a boolean to toggle test mode.

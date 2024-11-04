@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GameApp
 {
@@ -54,16 +56,36 @@ namespace GameApp
             int? locked, int? admin, int? highScore)
         {
             // Process null values (Doesn't accept C# null)
-            var strUsername = String.IsNullOrEmpty(username) ? "null" : "'" + username + "'";
-            var strPassword = String.IsNullOrEmpty(password) ? "null" : "'" + password + "'";
+            var strUsername = string.IsNullOrEmpty(username) ? "null" : "'" + username + "'";
+            var strPassword = string.IsNullOrEmpty(password) ? "null" : "'" + password + "'";
             var strLocked = locked.HasValue ? locked.Value.ToString() : "null";
             var strAdmin = admin.HasValue ? admin.Value.ToString() : "null";
             var strHighScore = highScore.HasValue ? highScore.Value.ToString() : "null";
+            DataRow? message;
 
-            var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection, 
+            try
+            {
+                var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection,
                 $"call UpdatePlayer('{playerID}', {strUsername}, {strPassword}, {strLocked}, " +
                 $"{strAdmin}, {strHighScore})");
-            DataRow? message = (dataSet.Tables[0].Rows[0]);
+                message = (dataSet.Tables[0].Rows[0]);
+                if (message.Table.Columns.Contains("Message"))
+                {
+                    string message2 = (string)(dataSet.Tables[0].Rows[0])["Message"];
+                    if (message2.Substring(0, 5) == "Error")
+                    {
+                        throw new Exception(message2.Substring(7));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unknown error occurred while updating player:", ex.ToString());
+                DataTable errorTable = new DataTable();
+                errorTable.Columns.Add("Message");
+                message = errorTable.NewRow();
+                message["Message"] = "Error";
+            }
             return message;
         }
         
@@ -74,8 +96,22 @@ namespace GameApp
         /// <returns></returns>
         static public string DeletePlayer(int playerID)
         {
-            var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection, $"call DeletePlayer('{playerID}')");
-            string message = (string)(dataSet.Tables[0].Rows[0])["Message"];
+            string message = "";
+
+            try
+            {
+                var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection, $"call DeletePlayer('{playerID}')");
+                message = (string)(dataSet.Tables[0].Rows[0])["Message"];
+                if (message.Substring(0, 5) == "Error")
+                {
+                    throw new Exception(message.Substring(7));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unknown error occurred while deleting player:", ex.ToString());
+                message = "Error";
+            }
             return message;
         }
     }

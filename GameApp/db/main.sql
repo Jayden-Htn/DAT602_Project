@@ -1,6 +1,203 @@
--- Survivor Island Procedure Script
+-- Survivor Island Full Database Script
 
+drop database if exists GameDB;
+create database GameDB;
 use GameDB;
+
+
+
+
+-- <==================== TABLES ====================>
+
+-- Make Tables Procedure
+delimiter //
+drop procedure if exists MakeTables//
+create procedure MakeTables()
+begin
+    drop table if exists tblPlayer;
+	create table tblPlayer (
+		ID            	int not null auto_increment, 
+		Username      	varchar(255) not null unique, 
+		`Password`    	varchar(255) not null, 
+		LoginAttempts 	tinyint default 0 not null, 
+		`Locked`      	bit(1) default 0 not null, 
+		`Online`     	bit(1) default 0 not null, 
+		`Admin`      	bit(1) default 0 not null, 
+		HighestScore  	int default 0 not null, 
+        primary key (ID)
+	);
+	drop table if exists tblGame;
+    create table tblGame (
+        GameID    		int not null auto_increment, 
+        StartTime 		datetime not null, 
+        primary key (GameID)
+	);
+    drop table if exists tblCharacter;
+    create table tblCharacter (
+		ID				int not null auto_increment,
+        PlayerID    	int not null, 
+        GameID        	int not null, 
+        ColPosition     	int default 1 not null, 
+        RowPosition     	int default 1 not null, 
+        Score         	int default 0 not null, 
+        CurrentHealth 	tinyint  default 100 not null, 
+        MaxHealth     	tinyint  default 100 not null, 
+        primary key (ID),
+        foreign key (PlayerID) references tblPlayer(ID) on delete cascade,
+        foreign key (GameID) references tblGame(GameID) on delete cascade
+	);
+	drop table if exists tblEntity;
+    create table tblEntity (
+        `Name`       	varchar(255) not null, 
+        HealthEffect 	tinyint not null, 
+        ScoreEffect  	tinyint not null, 
+        AddInventory 	bit(1) not null, 
+        IsNpc	bit(1) not null, 
+        primary key (`Name`)
+	);
+	drop table if exists tblTileType;
+    create table tblTileType (
+        `Name`        	varchar(255) not null, 
+        Entity         	varchar(255), 
+        IsObstacle    	bit(1) not null, 
+        SpawnModifier 	double not null, 
+        primary key (`Name`),
+        foreign key (Entity) references tblEntity(`Name`)
+	);
+    drop table if exists tblChatMessage;
+    create table tblChatMessage (
+        ID       		int not null auto_increment, 
+        PlayerID 		int not null, 
+        GameID   		int not null, 
+        Message  		varchar(255) not null, 
+        `DateTime` 		datetime not null, 
+        primary key (ID),
+        foreign key (PlayerID) references tblPlayer(ID) on delete cascade,
+        foreign key (GameID) references tblGame(GameID) on delete cascade
+	);
+	drop table if exists tblMap;
+    create table tblMap (
+        ID         		int not null auto_increment, 
+        GameID    		int not null unique, 
+        MaxColumns 		int not null, 
+        MaxRows    		int not null, 
+        HomeTile		int,
+        primary key (ID),
+        foreign key (GameID) references tblGame(GameID) on delete cascade
+	);
+    drop table if exists tblTile;
+    create table tblTile (
+        ID             	int not null auto_increment, 
+        MapID          	int not null, 
+        ColPosition 	int not null, 
+        RowPosition    	int not null, 
+        TileTypeName   	varchar(255) not null, 
+        primary key (ID),
+        foreign key (MapID) references tblMap(ID) on delete cascade
+	);
+    drop table if exists tblInventory;
+    create table tblInventory(
+		ID				int not null auto_increment,
+        ItemName    	varchar(255) not null, 
+        CharacterID 	int not null,
+        primary key (ID),
+        foreign key (ItemName) references tblEntity(`Name`),
+		foreign key (CharacterID) references tblCharacter(ID) on delete cascade
+	);
+    drop table if exists tblGameRequests;
+    create table tblGameRequest (
+        PlayerID  		int not null, 
+        PlayerID2 		int not null, 
+        primary key (PlayerID, PlayerID2),
+        foreign key (PlayerID) references tblPlayer(ID) on delete cascade,
+        foreign key (PlayerID2) references tblPlayer(ID) on delete cascade
+	);
+	alter table tblMap add foreign key (HomeTile) references tblTile(ID);
+end//
+delimiter ;
+
+-- Insert Data Procedure
+delimiter //
+drop procedure if exists InsertData//
+create procedure InsertData()
+begin
+	insert into tblPlayer (Username, `Password`, `Locked`)
+	values 
+        ("Player1", "Password123", 0),
+        ("Player2", "Password123", 0),
+        ("Player3", "Password123", 0),
+        ("Player4", "Password123", 1);
+	insert into tblGame (StartTime)
+	values 
+        ("2004-08-27 11:46:22"),
+        ("2004-08-27 11:46:22");
+	insert into tblEntity (`Name`, HealthEffect, ScoreEffect, AddInventory, IsNpc)
+	values 
+        ("Fruit", 20, 0, 1, 0),
+        ("Meat", 50, 0, 1, 0),
+        ("Coin", 0, 1, 0, 0),
+        ("Gem", 0, 5, 0, 0),
+        ("Spider", -10, 5, 0, 1),
+        ("Snake", -30, 10, 0, 1),
+        ("Boar", -80, 20, 0, 1);
+	insert into tblCharacter (PlayerID, GameID)
+	values 
+        (1, 1),
+        (2, 1);
+	insert into tblInventory(ItemName, CharacterID)
+	values 
+        ("Meat", 1);
+    insert into tblChatMessage (PlayerID, GameID, Message, `Datetime`)
+	values 
+        (1, 1, "Hey where are you", "2004-08-27 11:49:32"),
+        (2, 1, "Go away", "2004-08-27 11:51:51");
+	insert into tblTileType(`Name`, Entity, IsObstacle, SpawnModifier)
+	values 
+		("Coin", "Coin", 0, 0.7),
+        ("Gem", "Gem", 0, 0.3),
+        ("Spider", "Spider", 0, 0.7),
+        ("Snake", "Snake", 0, 0.5),
+        ("Boar", "Boar", 0, 0.2),
+        ("Fruit", "Fruit", 0, 0.8),
+        ("Meat", "Meat", 0, 0.2),
+        ("Rock", null, 1, 1);
+	insert into tblMap(GameID, MaxColumns, MaxRows)
+	values 
+        (1, 10, 10),
+        (2, 10, 10);
+	insert into tblTile(MapID, ColPosition, RowPosition, TileTypeName)
+	values 
+        (1, 2, 1, "Gem"),
+        (1, 2, 2, "Snake"),
+        (1, 6, 2, "Boar"),
+        (1, 3, 2, "Fruit");
+	insert into tblGameRequest(PlayerID, PlayerID2)
+	values 
+        (1, 2);
+end//
+delimiter ;
+
+-- Create Database Users Procedure
+delimiter //
+drop procedure if exists CreateUsers//
+create procedure CreateUsers()
+begin
+	-- drop user 'game'@'localhost';
+	if (not exists (select user, host from mysql.user where user = 'game' and host = 'localhost')) then
+		create user 'game'@'localhost' identified by 'password123';
+		grant execute, select, insert, update, delete on GameDB.* to 'game'@'localhost';
+	end if;
+end//
+delimiter ;
+
+call MakeTables();
+call InsertData();
+call CreateUsers();
+
+
+
+
+-- <==================== PROCEDURES ====================>
 
 -- <========== 1. Login Procedure ==========>
 delimiter //
@@ -645,5 +842,227 @@ begin
     commit;
 end//
 delimiter ;
+
+
+
+
+-- <==================== EXTRA PROCEDURES ====================>
+
+-- <========== 1e. Get Character Data Procedure ==========>
+delimiter //
+drop procedure if exists GetCharacterData//
+create definer = 'game'@'localhost' procedure GetCharacterData (
+	in pCharacterID int
+)
+comment 'Get character position, score and health'
+begin
+    -- Check if user exists
+	if exists (select * from tblCharacter where ID = pCharacterID) then
+		-- Username already exists
+        select ColPosition, RowPosition, Score, CurrentHealth from tblCharacter where ID = pCharacterID;
+    else
+		select "No character" as 'Message';
+	end if;
+end//
+delimiter ;
+
+
+-- <========== 2e. Find Game Procedure ==========>
+delimiter //
+drop procedure if exists FindGame//
+create definer = 'game'@'localhost' procedure FindGame (
+	in pPlayerID int,
+    in pOpponentID int
+)
+comment 'Find an existing game between two players'
+begin
+    -- Find games
+	select c.ID as 'CharacterID', PlayerID, c.GameID as 'GameID', ColPosition, RowPosition, 
+		Score, CurrentHealth, m.ID as 'MapID' from tblCharacter c
+    join tblMap m on c.GameID = m.GameID
+	where PlayerID = pPlayerID 
+        and c.GameID in (select GameID from tblCharacter where PlayerID = pPlayerID) 
+        and c.GameID in (select GameID from tblCharacter where PlayerID = pOpponentID);
+end//
+delimiter ;
+
+
+-- <========== 3e. Start Game Procedure ==========>
+delimiter //
+drop procedure if exists StartGame//
+create definer = 'game'@'localhost' procedure StartGame (
+	in pPlayerID int,
+    in pOpponentID int
+)
+comment 'Create a new game, characters and map'
+begin
+	declare vGameID int;
+    declare vMapID int;
+    
+    -- Create new game
+    insert into tblGame (StartTime)
+	values (Now());  
+	
+	select Last_Insert_ID() into vGameID;
+        
+	-- Create characters
+    insert into tblCharacter (PlayerID, GameID)
+	values 
+		(pPlayerID, vGameID),
+		(pOpponentID, vGameID);
+        
+	-- Create map
+    insert into tblMap(GameID, MaxColumns, MaxRows)
+	values (vGameID, 10, 10);
+    
+    select ID into vMapID from tblMap where GameID = vGameID;
+    
+	call GenerateMap(vMapID, 0);
+    
+    -- Return character data
+    select c.ID as 'CharacterID', PlayerID, c.GameID as 'GameID', ColPosition, RowPosition, 
+		Score, CurrentHealth, m.ID as 'MapID' from tblCharacter c
+    join tblMap m on c.GameID = m.GameID
+    where PlayerID = pPlayerID and c.GameID = vGameID;
+end//
+delimiter ;
+
+
+-- <========== 4e. Get Active Players Procedure ==========>
+delimiter //
+drop procedure if exists GetActivePlayers//
+create definer = 'game'@'localhost' procedure GetActivePlayers ()
+comment 'Get all active players'
+begin
+	select ID, Username, HighestScore from tblPlayer where `Online` = 1;
+end//
+delimiter ;
+
+
+-- <========== 5e. Get Games Procedure ==========>
+delimiter //
+drop procedure if exists GetGames//
+create definer = 'game'@'localhost' procedure GetGames ()
+comment 'Get all games'
+begin 
+	-- Get game id and both player usernames for each game
+	select g.GameID as 'ID', p1.Username as 'Username1', p2.Username as 'Username2'
+    from tblGame g
+    join tblCharacter c1 on g.GameID = c1.GameID
+    join tblCharacter c2 on g.GameID = c2.GameID and c2.PlayerID > c1.PlayerID
+    join tblPlayer p1 on c1.PlayerID = p1.ID
+    join tblPlayer p2 on c2.PlayerID = p2.ID;
+end//
+delimiter ;
+
+
+-- <========== 6e. Setup Database Procedure ==========>
+delimiter //
+drop procedure if exists SetupDatabase//
+create definer = 'game'@'localhost' procedure SetupDatabase ()
+comment 'Set isolation level'
+begin 
+	set transaction isolation level read committed;
+end//
+delimiter ;
+
+
+
+
+-- <==================== TESTS ====================>
+
+-- <========== Login Procedure ==========>
+-- Inputs: username, password
+select * from tblPlayer where `Online` = 1; -- Return: no players online
+call Login('Player1', 'Password123'); -- Return Message: <Player ID>
+call Login('Player1', 'Password'); -- Return Message: 'Invalid credentials'
+call Login('Player46', 'Password123'); -- Return Message: 'No account'
+call Login('Player4', 'Password123'); -- Return Message: 'Locked out'
+select * from tblPlayer where `Online` = 1; -- Return: only Player 1 as online
+
+-- <========== Register Procedure ==========>
+-- Inputs: username, password
+call Register('Player5', 'Password123'); -- Return Message: <Player ID>
+call Register('Player5', 'Password123'); -- Return Message: 'Duplicate'
+
+-- <========== Layout Procedure ==========>
+-- Inputs: CharacterID, GameID
+call Layout(1, 1); -- Return three unique tiles within 4 tiles of character (1,1) 
+-- Note: range to be modified to meet game implementation or can be removed
+
+-- <========== Generate Map Procedure ==========>
+-- Inputs: MapID, output? bit
+delete from tblTile where MapID = 2;
+call GenerateMap(2, 1); -- Return approx. 33 unique tiles (if 10x10 map)
+-- Disabling output means this procedure can be called from another 
+-- procedure without affect its output
+
+-- <========== Move Player Procedure ==========>
+-- Inputs: CharacterID, GameID, NewTileCol, NewTileRow (use position as empty tiles don't have id)
+select * from tblCharacter where ID = 1; -- Character at 1, 1
+call MovePlayer(1, 1, 0, 0); -- Return Message: 'Out of map'
+call MovePlayer(1, 1, 5, 5); -- Return Message: 'Tile not in range'
+call MovePlayer(1, 1, 1, 1); -- Return Message: 'Character already in position'
+call MovePlayer(1, 1, 2, 2); -- Return Message: 'Successful move'
+select * from tblCharacter where ID = 1; -- Character at at 2, 2
+
+-- <========== Update Score Procedure ==========>
+-- Inputs: CharacterID, Score change 
+-- Note: this will likely be called in the tile interact prodecure which will check tile type and effect
+select * from tblCharacter where ID = 1; -- Score is 0
+call UpdateScore(1, 20); -- Return Message: 'Score updated'
+select * from tblCharacter where ID = 1; -- Score is 20
+call UpdateScore(546, 20); -- Return Message: 'Player not found'
+
+-- <========== Interact (Pickup) Procedure ==========>
+-- Inputs: CharacterID, GameID, ColPos, RowPos
+-- Note: if clicked tile matches own character position, call this instead of move
+select * from tblCharacter where ID = 1; -- Score 20, health 100
+call TileInteract(1, 1, 2, 1); -- Collects gem, Return Message: 'Success'
+select * from tblCharacter where ID = 1; -- Score 25, health 100
+call TileInteract(1, 1, 2, 2); -- Fights snake, Return Message: 'Success'
+select * from tblCharacter where ID = 1; -- Score 35, health 70
+call TileInteract(1, 1, 2, 2); -- Empty tile, Return Message: 'Tile not found'
+select * from tblInventory where CharacterID = 1; -- Just 1x meat
+call TileInteract(1, 1, 3, 2); -- Picks up fruit, Return Message: 'Success'
+select * from tblInventory where CharacterID = 1; -- Now fruit in inventory too
+
+-- <========== NPC Move Procedure ==========>
+-- Inputs: MapID
+select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapID = 1 and IsNpc = 1; 
+	-- Gets one NPC, positions 6,2
+call NpcMove(3); -- Return Message: <number of NPCs moved>
+
+select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapID = 1 and IsNpc = 1; 
+	-- NPC should have moved to an adjacent tile 
+-- Note: won't move if hit map boundary or selects occupied tile, otherwise 100% chance
+-- But may need to be run multiple times depending on the random tiles selected
+
+-- <========== Stop Game Procedure ==========>
+-- Inputs: GameID [null]
+select * from tblGame; -- 3 games
+call StopGame(1); -- Return Message: 'Stopped game'
+select * from tblGame; -- 2 games, GameID 1 stopped
+call StopGame(null); -- Return Message: 'Stopped all games'
+select * from tblGame; -- 0 games, stops all games if not specified
+select * from tblTile; -- Cascaded so no tiles, maps, etc. stored
+
+-- <========== Update Player Procedure ==========>
+-- ???
+
+-- <========== Update Player Procedure ==========>
+-- Inputs: PlayerID, Username [null], Password [null], Locked [null], Admin [null], HighScore [null]
+select * from tblPlayer where ID = 1; -- Original data
+call UpdatePlayer(1, "EpicGamer", "NewPassword", 1, 1, 0); -- Return: updated player details
+call UpdatePlayer(1, null, null, 0, 0, null); -- Return: updated player details (null fields the same)
+
+-- <========== Delete Player Procedure ==========>
+-- Inputs: PlayerID
+select * from tblPlayer; -- Player exists
+call DeletePlayer(3); -- Return Message: 'Success'
+select * from tblPlayer; -- Player deleted
+call DeletePlayer(3); -- Return Message: 'Player doesn't exist'
+-- Cascade deleted game, characters, etc. (already deleted from delete all games example)
+				 
 
 				 

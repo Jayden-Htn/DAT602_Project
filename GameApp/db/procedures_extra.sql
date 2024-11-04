@@ -106,6 +106,16 @@ begin
     join tblCharacter c2 on g.GameID = c2.GameID and c2.PlayerID > c1.PlayerID
     join tblPlayer p1 on c1.PlayerID = p1.ID
     join tblPlayer p2 on c2.PlayerID = p2.ID;
-    -- > check removes all extra combinations
+end//
+delimiter ;
+
+
+-- <========== 6e. Setup Database Procedure ==========>
+delimiter //
+drop procedure if exists SetupDatabase//
+create definer = 'game'@'localhost' procedure SetupDatabase ()
+comment 'Set isolation level'
+begin 
+	set transaction isolation level read committed;
 end//
 delimiter ;

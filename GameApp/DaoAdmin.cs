@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace GameApp
 {
@@ -18,13 +19,25 @@ namespace GameApp
         /// <returns>List of player objects.</returns>
         static public List<objPlayer> GetActivePlayers()
         {
-            var dataset = MySqlHelper.ExecuteDataset(mySqlConnection, "call GetActivePlayers()");
-            
             List<objPlayer> playerList = [];
-            foreach (var data in System.Data.DataTableExtensions.AsEnumerable(dataset.Tables[0]))
+
+            try
             {
-                playerList.Add(new objPlayer((int)data["ID"], (string)data["Username"], (int)data["HighestScore"]));
+                var dataset = MySqlHelper.ExecuteDataset(mySqlConnection, "call GetActivePlayers()");
+
+                
+                foreach (var data in System.Data.DataTableExtensions.AsEnumerable(dataset.Tables[0]))
+                {
+                    playerList.Add(new objPlayer((int)data["ID"], (string)data["Username"], (int)data["HighestScore"]));
+                }
+                
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unknown error occurred while getting players:", ex.ToString());
+                playerList.Add(new objPlayer(0, "Error", 0)); // Make error placeholder player
+            }
+
             return playerList;
         }
 
@@ -34,12 +47,22 @@ namespace GameApp
         /// <returns>List of game objects.</returns>
         static public List<objGame> GetGames()
         {
-            var dataset = MySqlHelper.ExecuteDataset(mySqlConnection, "call GetGames()");
-
             List<objGame> gameList = [];
-            foreach (var data in System.Data.DataTableExtensions.AsEnumerable(dataset.Tables[0]))
+
+            try
             {
-                gameList.Add(new objGame((int)data["ID"], (string)data["Username1"], (string)data["Username2"]));
+                var dataset = MySqlHelper.ExecuteDataset(mySqlConnection, "call GetGames()");
+
+                foreach (var data in System.Data.DataTableExtensions.AsEnumerable(dataset.Tables[0]))
+                {
+                    gameList.Add(new objGame((int)data["ID"], (string)data["Username1"], (string)data["Username2"]));
+                }
+                return gameList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unknown error occurred while getting games:", ex.ToString());
+                gameList.Add(new objGame(0, "Error", ""));
             }
             return gameList;
         }

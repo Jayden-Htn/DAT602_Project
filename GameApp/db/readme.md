@@ -1,5 +1,6 @@
 # Database Files
 
+- main: FULL script with tabel creation, data serts, procedures, extra procedures, and tests
 - start: creates tables and relationships with demo data
 - procedures: all procedures for the game
 - procedure_test: tests all procedures from a MySQL script

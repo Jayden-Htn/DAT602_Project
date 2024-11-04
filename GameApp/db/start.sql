@@ -125,7 +125,6 @@ begin
 	insert into tblGame (StartTime)
 	values 
         ("2004-08-27 11:46:22"),
-        ("2004-08-27 11:46:22"),
         ("2004-08-27 11:46:22");
 	insert into tblEntity (`Name`, HealthEffect, ScoreEffect, AddInventory, IsNpc)
 	values 

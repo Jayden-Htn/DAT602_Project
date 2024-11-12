@@ -98,7 +98,7 @@ namespace GameApp
 
             // Update player procedure
             Debug.WriteLine("\n<==== 10. New player procedure tests ====>");
-            // ????????
+            // Please refer to register player procedure and test
 
             // Update player procedure
             Debug.WriteLine("\n<==== 11. Update player procedure tests ====>");

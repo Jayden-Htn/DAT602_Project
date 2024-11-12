@@ -22,10 +22,24 @@ namespace GameApp
         /// <returns></returns>
         static public string Login(string username, string password)
         {
-            var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection, 
+            string? message;
+
+            try
+            {
+                var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection,
                 $"call Login('{username}', '{password}')");
-            string? message = (dataSet.Tables[0].Rows[0])["Message"].ToString();
-            return String.IsNullOrEmpty(message) ? "No message" : message;
+                message = (dataSet.Tables[0].Rows[0])["Message"].ToString();
+                if (message.Length > 5 && message.Substring(0, 5) == "Error")
+                {
+                    throw new Exception(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unknown error occurred logging in player: {ex.Message}", "Error");
+                message = "Error";
+            }
+            return string.IsNullOrEmpty(message) ? "No message" : message;
         }
 
         /// <summary>
@@ -36,10 +50,24 @@ namespace GameApp
         /// <returns></returns>
         static public string Register(string username, string password)
         {
-            var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection, 
+            string? message;
+
+            try
+            {
+                var dataSet = MySqlHelper.ExecuteDataset(mySqlConnection,
                 $"call Register('{username}', '{password}')");
-            string? message = (dataSet.Tables[0].Rows[0])["Message"].ToString();
-            return String.IsNullOrEmpty(message) ? "No message" : message;
+                message = (dataSet.Tables[0].Rows[0])["Message"].ToString();
+                if (message.Substring(0, 5) == "Error")
+                {
+                    throw new Exception(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unknown error occurred while registering player: {ex.Message}");
+                message = "Error";
+            }
+            return string.IsNullOrEmpty(message) ? "No message" : message;
         }
 
         /// <summary>
@@ -52,7 +80,7 @@ namespace GameApp
         /// <param name="admin">New admin bit or null.</param>
         /// <param name="highScore">New high score or null.</param>
         /// <returns></returns>
-        static public DataRow UpdatePlayer(int playerID, string? username, string? password, 
+        static public DataRow UpdatePlayer(int playerID, string? username, string? password,
             int? locked, int? admin, int? highScore)
         {
             // Process null values (Doesn't accept C# null)
@@ -74,13 +102,13 @@ namespace GameApp
                     string message2 = (string)(dataSet.Tables[0].Rows[0])["Message"];
                     if (message2.Substring(0, 5) == "Error")
                     {
-                        throw new Exception(message2.Substring(7));
+                        throw new Exception(message2);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while updating player:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while updating player: {ex.Message}");
                 DataTable errorTable = new DataTable();
                 errorTable.Columns.Add("Message");
                 message = errorTable.NewRow();
@@ -88,7 +116,7 @@ namespace GameApp
             }
             return message;
         }
-        
+
         /// <summary>
         /// Delete a player account and all related data.
         /// </summary>
@@ -104,12 +132,12 @@ namespace GameApp
                 message = (string)(dataSet.Tables[0].Rows[0])["Message"];
                 if (message.Substring(0, 5) == "Error")
                 {
-                    throw new Exception(message.Substring(7));
+                    throw new Exception(message);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while deleting player:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while deleting player: {ex.Message}");
                 message = "Error";
             }
             return message;

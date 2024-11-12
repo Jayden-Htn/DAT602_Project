@@ -19,22 +19,21 @@ namespace GameApp
         /// <returns>List of player objects.</returns>
         static public List<objPlayer> GetActivePlayers()
         {
-            List<objPlayer> playerList = [];
+            List<objPlayer> playerList = new List<objPlayer>();
 
             try
             {
                 var dataset = MySqlHelper.ExecuteDataset(mySqlConnection, "call GetActivePlayers()");
 
-                
                 foreach (var data in System.Data.DataTableExtensions.AsEnumerable(dataset.Tables[0]))
                 {
                     playerList.Add(new objPlayer((int)data["ID"], (string)data["Username"], (int)data["HighestScore"]));
                 }
-                
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while getting players:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while getting players: {ex.Message}");
                 playerList.Add(new objPlayer(0, "Error", 0)); // Make error placeholder player
             }
 
@@ -47,7 +46,7 @@ namespace GameApp
         /// <returns>List of game objects.</returns>
         static public List<objGame> GetGames()
         {
-            List<objGame> gameList = [];
+            List<objGame> gameList = new List<objGame>();
 
             try
             {
@@ -61,7 +60,7 @@ namespace GameApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while getting games:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while getting games: {ex.Message}");
                 gameList.Add(new objGame(0, "Error", ""));
             }
             return gameList;

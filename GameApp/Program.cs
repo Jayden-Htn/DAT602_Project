@@ -1,6 +1,7 @@
 using GameApp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,11 +16,19 @@ namespace DAT601_Game
         [STAThread]
         static void Main()
         {
-            bool testMode = false;
+            bool testMode = true; // false: run program: true run tests
+            bool csharpTests = true; // false: run standard MySQL tests, true test for C# error handling
             if (testMode)
             {
                 // Run database tests
-                Tester.Test();
+                if (csharpTests)
+                {
+                    TesterErrors.Test(); // test C# error handling
+                }
+                else
+                {
+                    Tester.Test(); // Test procedures and methods work
+                }
             }
             else
             {

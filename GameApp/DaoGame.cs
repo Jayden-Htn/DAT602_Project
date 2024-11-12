@@ -37,7 +37,7 @@ namespace GameApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while getting map:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while getting map: {ex.Message}");
                 tileList.Add(new objTile(0, 0, 0, 0, "Error")); // Add placeholder error tile       
             }
 
@@ -65,7 +65,7 @@ namespace GameApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while generating map:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while generating map: {ex.Message}");
                 tileList.Add(new objTile(0, 0, 0, 0, "Error")); // Add placeholder error tile  
             }
             
@@ -90,12 +90,12 @@ namespace GameApp
                 message = (string)(data.Tables[0].Rows[0])["Message"];
                 if (message.Substring(0, 5) == "Error")
                 {
-                    throw new Exception(message.Substring(7));
+                    throw new Exception(message);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while generating map:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while generating map: {ex.Message}");
             }
             return message;
 
@@ -117,12 +117,12 @@ namespace GameApp
                 message = (string)(data.Tables[0].Rows[0])["Message"];
                 if (message.Substring(0, 5) == "Error")
                 {
-                    throw new Exception(message.Substring(7));
+                    throw new Exception(message);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while updating character score:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while updating character score: {ex.Message}");
             }
             return message;
         }
@@ -145,12 +145,12 @@ namespace GameApp
                 message = (string)(data.Tables[0].Rows[0])["Message"];
                 if (message.Substring(0, 5) == "Error")
                 {
-                    throw new Exception(message.Substring(7));
+                    throw new Exception(message);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while interacting with tile:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while interacting with tile: {ex.Message}");
             }
             return message;
         }
@@ -165,18 +165,18 @@ namespace GameApp
             string? message = "";
             try
             {
-                var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call NpcMove('{mapID}')");
-                message = (string?)(data.Tables[0].Rows[0])["Message"];
-                if (message.Substring(0, 5) == "Error")
+                var data = MySqlHelper.ExecuteDataset(mySqlConnection, $"call NpcMove({mapID})");
+                message = Convert.ToString((data.Tables[0].Rows[0])["Message"]);
+                if (message.Length >= 5 && message.Substring(0, 5) == "Error")
                 {
-                    throw new Exception(message.Substring(7));
+                    throw new Exception(message);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while moving NPCS:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while moving NPCs: {ex.Message}");
             }
-            return !String.IsNullOrEmpty(message) ? message : "No Message";
+            return !string.IsNullOrEmpty(message) ? message : "No Message";
         }
 
         /// <summary>
@@ -194,12 +194,12 @@ namespace GameApp
                 message = (string)(data.Tables[0].Rows[0])["Message"];
                 if (message.Substring(0, 5) == "Error")
                 {
-                    throw new Exception(message.Substring(7));
+                    throw new Exception(message);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while stopping game:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while stopping game: {ex.Message}");
             }
             return message;
         }
@@ -219,7 +219,7 @@ namespace GameApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unknown error occurred while stopping game:", ex.ToString());
+                MessageBox.Show($"An unknown error occurred while stopping game: {ex.Message}");
                 DataTable errorTable = new DataTable();
                 errorTable.Columns.Add("Message");
                 message = errorTable.NewRow();

@@ -215,12 +215,12 @@ begin
 		rollback;
 		select 'Error: Lock wait timeout. Please try again later.' as 'Message';
 	end;
-	declare exit handler for 1048
-	begin
-		rollback;
-		select 'Error: A required column cannot be null.' as 'Message';
-	end;
     declare exit handler for sqlstate 'HY000'
+    begin
+		rollback;
+		select 'Error: General database error occurred.' as 'Message';
+	end;
+    declare exit handler for SQLEXCEPTION
     begin
 		rollback;
 		select 'Error: Database error occurred.' as 'Message';
@@ -969,6 +969,9 @@ delimiter ;
 
 
 
+
+
+
 -- <==================== TESTS ====================>
 
 -- <========== Login Procedure ==========>
@@ -1031,7 +1034,7 @@ select * from tblInventory where CharacterID = 1; -- Now fruit in inventory too
 -- Inputs: MapID
 select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapID = 1 and IsNpc = 1; 
 	-- Gets one NPC, positions 6,2
-call NpcMove(3); -- Return Message: <number of NPCs moved>
+call NpcMove(1); -- Return Message: <number of NPCs moved>
 
 select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapID = 1 and IsNpc = 1; 
 	-- NPC should have moved to an adjacent tile 
@@ -1043,7 +1046,7 @@ select * from tblTile t join tblEntity e on t.TileTypeName = e.`Name` where MapI
 select * from tblGame; -- 3 games
 call StopGame(1); -- Return Message: 'Stopped game'
 select * from tblGame; -- 2 games, GameID 1 stopped
-call StopGame(null); -- Return Message: 'Stopped all games'
+/* call StopGame(null); -- Return Message: 'Stopped all games' */ /* Commented out to test other procedures?
 select * from tblGame; -- 0 games, stops all games if not specified
 select * from tblTile; -- Cascaded so no tiles, maps, etc. stored
 

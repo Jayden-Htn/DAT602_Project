@@ -4,10 +4,8 @@
 
 To run this project:
 1. Load Solution into Visual Studio
-2. Run /db/start.sql to initialise the database
-3. Run /db/procedures.sql to create the main procedures
-4. Run /db/procedures_extra_.sql to create extra required procedures
-5. Run the program
+2. Run /db/main.sql to initialise the database
+3. Run the program
 
 Note: if testing procedure, you may need to reset the database or errors may occur.
 
@@ -17,9 +15,13 @@ Suggested user accounts for testing:
 
 ## Run Modes
 
-In Program.cs there is a boolean to toggle test mode.
+In Program.cs there is a boolean to toggle test mode:
 - On: no forms will be opened, the program will run all database tests logging to the console and end.
 - Off: run the winform app as normal
+
+Note: testing mode has two options:
+- Run the M2 procedure tests
+- Run the M3 C# error handling tests
 
 Note: ENSURE you have a clean setup on the database and procedures before running any tests, 
 as manipulations of the data will cause issues if re-run.
